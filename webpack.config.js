@@ -1,15 +1,13 @@
 const path = require('path');
 const webpack = require('webpack');
 
-const DIST_DIR   = path.join(__dirname, "public");
-
 module.exports = {
   entry: [
     'react-hot-loader/patch',
-    './src/index.js'
+    './src/app.js'
   ],
   output: {
-    path: DIST_DIR,
+    path: __dirname + '/public',
     filename: 'bundle.js'
   },
   module: {
@@ -21,6 +19,6 @@ module.exports = {
   },
   devtool: 'cheap-module-eval-source-map',
   devServer: {
-    contentBase: DIST_DIR
+    contentBase: './public'
   }
 };

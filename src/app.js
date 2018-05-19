@@ -7,13 +7,15 @@ import NotFoundPage from './notFoundPage';
 
 const App = () => (
   <div>
-    <BrowserRouter>
+    Goodbyworld!
+    Life is good
+    {/* <BrowserRouter>
       <Switch>
         <Route path='/' component={ MainPage } exact={ true } ></Route>
         <Route path='/two' component={ PageTwo }></Route>
         <Route component={ NotFoundPage }></Route>
       </Switch>
-    </BrowserRouter>
+    </BrowserRouter> */}
   </div>
 );
 
