@@ -1,2 +1,2 @@
-# CandleNote.io
+# WordScramble
 A cool app.
