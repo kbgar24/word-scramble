@@ -33,17 +33,39 @@ export default class Authentication extends Component {
     super(props);
     this.state = {
       isSignedIn: false,
+      currentUser: {},
+      currentUsers: [],
     }
   }
 
   componentDidMount() {
     this.unregisterAuthObserver = firebase.auth().onAuthStateChanged(
-      (user) => this.setState({ isSignedIn: !!user })
+      (user) => {
+        console.log('user: ', user);
+        if (user) {
+          firebase.database().ref('users/' + user.uid).set({
+            name: user.displayName,
+            isLoggedIn: true,
+            currentRoom: 'Lobby',
+            id: user.uid,
+          })
+          this.setState({ currentUser: { id: user.uid, name: user.displayName }})
+        }
+        this.setState({ isSignedIn: !!user })
+      }
     );
   }
 
   componentWillUnmount() {
     this.unregisterAuthObserver();
+  }
+
+  handleSignOut = () => {
+    const { id } = this.state.currentUser;
+    firebase.database().ref(`/users/${id}`).set({
+      isLoggedIn: false,
+    })
+    firebase.auth().signOut()
   }
 
   render = () => {
@@ -59,8 +81,16 @@ export default class Authentication extends Component {
     return (
       <div>
         <h1>My App</h1>
+        <h2>Current User Id: {this.state.currentUser.id}</h2>
+        <h2>Current User Id: {this.state.currentUser.name}</h2>
         <p>Welcome {firebase.auth().currentUser.displayName}! You are now signed-in!</p>
-        <a onClick={() => firebase.auth().signOut()}>Sign-out</a>
+        <h2>Logged in Users</h2>
+        <ul>
+          { 
+            this.state.currentUsers.map( user => <li>user.name</li> ) 
+          }
+        </ul>
+        <a onClick={this.handleSignOut}>Sign-out</a>
       </div>
     );
   }
