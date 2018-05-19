@@ -1,12 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Route, Link, Switch } from 'react-router-dom';
-import Main from './components/mainPage.jsx';
+import LetterGenerator from './components/letterGenerator.jsx';
 
 
 const App = () => (
   <div>
-    <Main />
+    <LetterGenerator />
     {/* <BrowserRouter>
       <Switch>
         <Route path='/' component={ MainPage } exact={ true } ></Route>

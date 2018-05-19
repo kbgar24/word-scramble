@@ -1,25 +1,8 @@
 import React from 'react';
+import { vowels, consonants, fisherYatesShuffle } from '../helpers';
+import WordBuilder from './wordBuilder.jsx';
 
-const vowels = 'aeiouy'.split('');
-const consonants = 'bcdfghjklmnpqrstvwxz'.split('');
-
-const fisherYatesShuffle = array => {
-    let currentIndex = array.length;
-    let temporaryValue; 
-    let randomIndex;
-    
-    while (currentIndex != 0) {
-      randomIndex = Math.floor(Math.random() * currentIndex);
-      currentIndex -= 1;
-      temporaryValue = array[currentIndex];
-      array[currentIndex] = array[randomIndex];
-      array[randomIndex] = temporaryValue;
-    }
-    return array;
-}
-
-
-export default class Main extends React.Component {
+export default class LetterGenerator extends React.Component {
 
   constructor() {
     super();
@@ -72,7 +55,11 @@ export default class Main extends React.Component {
 
     this.setState({ letters })
 
+  }
 
+  isValidWord = word => {
+    const { letters } = this.state;
+    return word.split('').every( letter => letters.includes(letter) );
   }
 
   render = () => (
@@ -83,6 +70,8 @@ export default class Main extends React.Component {
       <button onClick={this.seperateLettersByType}>Seperate Letters By Type</button>
       
       <p>{ this.state.letters.join(' ') }</p>
+
+      <WordBuilder isValidWord={this.isValidWord} />
     </div>
   );
 };
