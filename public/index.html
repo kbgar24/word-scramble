@@ -4,21 +4,26 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Welcome to Firebase Hosting</title>
-
-    <!-- update the version number as needed -->
-    <script defer src="/__/firebase/5.0.3/firebase-app.js"></script>
-    <!-- include only the Firebase features as you need -->
-    <script defer src="/__/firebase/5.0.3/firebase-auth.js"></script>
-    <script defer src="/__/firebase/5.0.3/firebase-database.js"></script>
-    <script defer src="/__/firebase/5.0.3/firebase-messaging.js"></script>
-    <script defer src="/__/firebase/5.0.3/firebase-storage.js"></script>
-    <!-- initialize the SDK after all desired features are loaded -->
-    <script defer src="/__/firebase/init.js"></script>
-
+    <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.0.0/firebaseui.css" />
   </head>
   <body>
     <div id="app"></div>
 
+
+    <script src="https://www.gstatic.com/firebasejs/5.0.3/firebase.js"></script>
+    <script>
+      // Initialize Firebase
+      var config = {
+        apiKey: "AIzaSyAKUjZ8dATJT0QNZqKWhVqTG9-bLT1JXa4",
+        authDomain: "word-scramble-bb2ad.firebaseapp.com",
+        databaseURL: "https://word-scramble-bb2ad.firebaseio.com",
+        projectId: "word-scramble-bb2ad",
+        storageBucket: "word-scramble-bb2ad.appspot.com",
+        messagingSenderId: "434068260131"
+      };
+      firebase.initializeApp(config);
+    </script>
+    <script src="https://cdn.firebase.com/libs/firebaseui/3.0.0/firebaseui.js"></script>
     <script>
       document.addEventListener('DOMContentLoaded', function() {
         // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
@@ -34,13 +39,13 @@
         try {
           let app = firebase.app();
           let features = ['auth', 'database', 'messaging', 'storage'].filter(feature => typeof app[feature] === 'function');
-          document.getElementById('load').innerHTML = `Firebase SDK loaded with ${features.join(', ')}`;
+          console.log(`Firebase SDK loaded with ${features.join(', ')}`)
         } catch (e) {
           console.error(e);
-          document.getElementById('load').innerHTML = 'Error loading the Firebase SDK, check the console.';
+          console.log('Error loading the Firebase SDK, check the console.');
         }
       });
     </script>
-    <script src='/bundle.js'></script>
+    <script src='bundle.js'></script>
   </body>
 </html>
