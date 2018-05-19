@@ -6,6 +6,10 @@ export default class MainPage extends React.Component {
     super();
   }
 
+  handleDelete = () => {
+    
+  }
+
   render = () => (
     <div>
       <h1>Main Page!</h1>

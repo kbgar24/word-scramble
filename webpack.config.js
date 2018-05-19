@@ -1,11 +1,13 @@
 const path = require('path');
+const webpack = require('webpack');
 
-const DIST_DIR   = path.join(__dirname, "dist");
-const CLIENT_DIR = path.join(__dirname, "src");
+const DIST_DIR   = path.join(__dirname, "public");
 
 module.exports = {
-  context: CLIENT_DIR,
-  entry: './app',
+  entry: [
+    'react-hot-loader/patch',
+    './src/index.js'
+  ],
   output: {
     path: DIST_DIR,
     filename: 'bundle.js'
