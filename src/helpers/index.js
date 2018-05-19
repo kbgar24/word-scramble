@@ -16,3 +16,23 @@ export const fisherYatesShuffle = array => {
   }
   return array;
 }
+
+export const makeLetterFrequencyMap = arrayofLetters => (
+  arrayofLetters.reduce((tv, cv) => {
+    tv[cv] ? tv[cv]++ : tv[cv] = 1;
+    return tv;
+  }, {})
+)
+
+export const isWordInLetters = (word, letters) => {
+  const letterMap = makeLetterFrequencyMap(letters);
+  const wordMap = makeLetterFrequencyMap(word.split(''));
+  const wordLetters = Object.keys(wordMap);
+
+  for (let letter of wordLetters) {
+    if (!letterMap[letter] || wordMap[letter] > letterMap[letter]) {
+      return false;
+    }
+  }
+  return true;
+}

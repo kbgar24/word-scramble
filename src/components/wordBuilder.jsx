@@ -6,7 +6,7 @@ export default class WordBuilder extends Component {
     super(props);
     this.state = {
       value: '',
-      validWord: false,
+      wordStatus: '',
     }
 
   }
@@ -15,28 +15,29 @@ export default class WordBuilder extends Component {
     this.setState({ value });
   }
 
-  handleClick = (e) => {
+  handleSubmit = (e) => {
     e.preventDefault();
-    const validWord = this.props.isValidWord(this.state.value)
-    this.setState({ validWord })
+    const wordStatus = this.props.isValidWord(this.state.value)
+    const value = '';
+    this.setState({ wordStatus, value })
   }
 
 
-
-  render = () => (
+  render = () => {
+    const { wordStatus } = this.state;
+    return(
     <div>
-      <form onSubmit={this.handleClick}>
+      <form onSubmit={this.handleSubmit}>
         <input value={this.state.value} onChange={this.handleChange}/>
         <input 
           type='submit'
           value='Check Word'
         />
       </form>
-      { 
-        this.state.validWord 
-        ? <h1>Valid Word!</h1>
-        : <h1>Invalid Word!</h1>
-      }
+        { wordStatus === 'isValid' && <h1>Valid Word!</h1> }
+        { wordStatus === 'alreadyPlayed' && <h1>Already Played!</h1> }
+        { wordStatus === 'notValid' && <h1>Invalid Word!</h1> }
     </div>
-  );
+    )
+  };
 };

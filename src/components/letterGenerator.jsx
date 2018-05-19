@@ -1,6 +1,8 @@
 import React from 'react';
-import { vowels, consonants, fisherYatesShuffle } from '../helpers';
+import { vowels, consonants, fisherYatesShuffle, isWordInLetters } from '../helpers';
 import WordBuilder from './wordBuilder.jsx';
+
+
 
 export default class LetterGenerator extends React.Component {
 
@@ -8,6 +10,7 @@ export default class LetterGenerator extends React.Component {
     super();
     this.state = {
       letters: [],
+      validWords: [],
     }
   }
 
@@ -58,8 +61,24 @@ export default class LetterGenerator extends React.Component {
   }
 
   isValidWord = word => {
-    const { letters } = this.state;
-    return word.split('').every( letter => letters.includes(letter) );
+    const { letters, validWords } = this.state;
+    const isPlayedAlready = validWords.includes(word);
+    const isValid = isWordInLetters(word, letters);
+    isValid && !isPlayedAlready && this.addValidWord(word);
+
+    return (
+      isPlayedAlready
+      ? 'alreadyPlayed'
+      : isValid 
+      ? 'isValid'
+      : 'notValid'
+    )
+  }
+
+
+  addValidWord = word => {
+    const validWords = [...this.state.validWords, word].sort();
+    this.setState({ validWords });
   }
 
   render = () => (
@@ -71,7 +90,9 @@ export default class LetterGenerator extends React.Component {
       
       <p>{ this.state.letters.join(' ') }</p>
 
-      <WordBuilder isValidWord={this.isValidWord} />
+      <ul>{ this.state.validWords.map((word, i) => <li key={i}>{word}</li>) }</ul>
+
+      <WordBuilder isValidWord={this.isValidWord} addValidWord={this.addValidWord} />
     </div>
   );
 };
