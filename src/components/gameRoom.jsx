@@ -10,17 +10,14 @@ export default class GameRoom extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      startTimer: false,
+      hasStarted: false,
     }
   }
 
   static getDerivedStateFromProps = (nextProps, prevState) => {
     const { currentRoom } = nextProps.currentUser;
     const { hasStarted  } = nextProps.state.data.rooms.find(({ name }) => name === currentRoom)
-    hasStarted
-    ? console.log('startingTimer!')
-    : console.log('stoppingTimer!')
-    return { ...prevState, startTimer: hasStarted }
+    return { ...prevState, hasStarted }
   }
 
   handleNewLetters = (currentLetters) => {
@@ -77,7 +74,7 @@ export default class GameRoom extends Component {
             } 
         </ul>
         {
-          this.state.startTimer
+          this.state.hasStarted
             ? <Countdown
               date={Date.now() + 20000}
               intervalDelay={0}
@@ -92,13 +89,14 @@ export default class GameRoom extends Component {
         
        
       
-        {/* <Timer startTimer={this.state.startTimer} /> */}
+        {/* <Timer hasStarted={this.state.hasStarted} /> */}
         <LetterGenerator 
           admin={this.props.currentUser.isAdmin}
           alreadyPlayed={currentRoomObj.alreadyPlayed}
           handleNewLetters={this.handleNewLetters}
           currentLetters={currentLetters}
           handleValidWord={this.handleValidWord}
+          hasStarted={this.state.hasStarted}
         />
         <button 
           name='Lobby'

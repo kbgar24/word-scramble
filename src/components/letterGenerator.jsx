@@ -102,8 +102,8 @@ export default class LetterGenerator extends React.Component {
       <div>
         <h1>Word Scramble</h1>
         { 
-          this.props.admin && 
-          <button onClick={this.handleGenerate}>Generate Letters</button>
+          this.props.admin && !this.props.hasStarted &&
+          <button onClick={this.handleGenerate}>Begin New Game!</button>
         
         }
         <button onClick={this.scrambleLetterList}>Scramble Letters</button>
