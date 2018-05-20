@@ -66,10 +66,10 @@ export default class Authentication extends Component {
   handleSignOut = () => {
     console.log('handleSignout called!');
     const { id } = this.props.currentUser;
-    // firebase.database().ref(`/users/${id}`).set({
-    //   isLoggedIn: false,
-    // })
-    // firebase.auth().signOut()
+    firebase.database().ref(`/users/${id}`).set({
+      isLoggedIn: false,
+    })
+    firebase.auth().signOut()
     // this.props.signOutUser(id)
   }
 

@@ -89,7 +89,7 @@ class App extends Component {
   }
 
   render(){
-    // console.log('AppState: ', this.state);
+    console.log('Approps: ', this.props);
     return(
       <div>
         <h1>My App</h1>
@@ -108,11 +108,12 @@ class App extends Component {
           </Switch>
         </BrowserRouter> */}
         <h2>Logged in Users</h2>
-        <ul>
-          {
-            this.state.currentUsers.map(({name, id, currentRoom}) => <li key={id}>{`${name} - ${currentRoom}`}</li>)
-          }
-        </ul>
+          <ul>
+            {
+              this.props.state.data.users.map(({name, id, currentRoom}) => <li key={id}>{`${name} - ${currentRoom}`}</li>)
+            }
+          </ul>
+        }
         <form onSubmit={this.handleCreateNewRoom}>
           <input type='text' value={this.state.newRoom} onChange={this.newRoomChange}/>
           <input type='submit' value='Create New Room'/>
