@@ -4,7 +4,7 @@ import { BrowserRouter, Route, Link, Switch } from 'react-router-dom';
 import LetterGenerator from './components/letterGenerator.jsx';
 // import Authentication from './components/authentication.jsx';
 import Authentication from './containers/authenticationContainer';
-import GameRoom from './components/gameRoom.jsx';
+import GameRoom from './containers/gameRoomContainer';
 import fire from './config/fire';
 import firebase from 'firebase'
 import { Provider, connect } from 'react-redux';
@@ -79,20 +79,35 @@ class App extends Component {
   handleCreateNewRoom= (e) => {
     e.preventDefault();
     // const { id } = this.props.users.currentUser;
+
     
-    this.props.createNewRoom(this.state.newRoom, this.props.state.user.currentUser.id)
+    this.props.createNewRoom(this.state.newRoom, this.props.state.user.currentUser)
     this.setState({ newRoom : '' })
     //render new room
     // update current room for user in db
     // 
   }
 
-  // handleLeaveRoom = () => {
-  //   const { id } = this.props.state.user.currentUser;
-  //   firebase.database().ref(`users/${id}`).update({
-  //     currentRoom: 'Lobby',
-  //   })
-  // }
+  handleLeaveRoom = (admin) => {
+    const { id, currentRoom:currentUserRoom } = this.state.currentUser;
+    if (admin) {
+      this.props.state.data.users
+        .filter(({ currentRoom }) => currentRoom === currentUserRoom)
+        .map(({id}) => id)
+        .forEach(id => {
+        firebase.database().ref(`users/${id}`).update({
+          currentRoom: 'Lobby',
+          isAdmin: false,
+        })
+      })
+      firebase.database().ref(`rooms/${currentUserRoom}`).remove();
+    } else {
+      firebase.database().ref(`users/${id}`).update({
+        currentRoom: 'Lobby',
+      })
+    }
+  }
+
 
   handleJoinRoom = ({ target: {  name } }) => {
     console.log('handleJoinRoom called: ')
@@ -153,10 +168,10 @@ class App extends Component {
           <input type='text' value={this.state.newRoom} onChange={this.newRoomChange}/>
           <input type='submit' value='Create New Room'/>
         </form>
-        { this.props.state.user.currentUser 
-          && this.props.state.user.currentUser.currentRoom
-          && this.props.state.user.currentUser.currentRoom !== 'Lobby'
-          && <GameRoom currentUser={this.props.state.user.currentUser} handleJoinRoom={this.handleJoinRoom} admin={this.props.state.user.currentUser.isAdmin} /> }
+        { this.state.currentUser 
+          && this.state.currentUser.currentRoom
+          && this.state.currentUser.currentRoom !== 'Lobby'
+          && <GameRoom currentUser={this.state.currentUser} handleLeaveRoom={this.handleLeaveRoom}  /> }
       </div>
     )
   }
