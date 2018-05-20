@@ -5,17 +5,20 @@ const defaultState = {
 export default ( state = defaultState, {type, payload} ) => {
   switch (type) {
     case 'UPDATE_CURRENT_USER':
-    console.log('udpate!!!!')
-    console.log('currentUser: ', payload);
+    console.log('STATE: ', state);
       return {
         ...state,
         currentUser: payload,
       }
-    // case 'UPDATE_USER_ROOM':
-    //   return {
-    //     ...state,
-    //     users: payload,
-    //   }
+    case 'UPDATE_USER_ROOM':
+      console.log('STATE!!!:  ', state)
+      return {
+        ...state,
+        currentUser: {
+          ...state.currentUser,
+          currentRoom: payload,
+        }
+      }
     default: return state
   }
 }

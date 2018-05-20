@@ -11,6 +11,8 @@ import { Provider, connect } from 'react-redux';
 import store from './store';
 import { fetchData } from './actions/fetchActions';
 import { createNewRoom } from './actions/roomActions';
+import { updateUserRoom } from './actions/userActions';
+
 
 const config = {
   apiKey: "AIzaSyAKUjZ8dATJT0QNZqKWhVqTG9-bLT1JXa4",
@@ -81,11 +83,19 @@ class App extends Component {
     // 
   }
 
-  handleLeaveRoom = () => {
-    const { id } = this.state.currentUser;
+  // handleLeaveRoom = () => {
+  //   const { id } = this.props.state.user.currentUser;
+  //   firebase.database().ref(`users/${id}`).update({
+  //     currentRoom: 'Lobby',
+  //   })
+  // }
+
+  handleJoinRoom = ({ target: {  name } }) => {
+    const { id } = this.props.state.user.currentUser;
     firebase.database().ref(`users/${id}`).update({
-      currentRoom: 'Lobby',
+      currentRoom: name,
     })
+    this.props.updateUserRoom(name);
   }
 
   render(){
@@ -117,7 +127,18 @@ class App extends Component {
         <h2>Current Rooms</h2>
         <ul>
           {
-            this.props.state.data.rooms.map(({ name }) => <li key={name}>{`${name}`}</li>)
+            this.props.state.data.rooms
+            .filter(({name}) => name !== 'Lobby' && name !== this.props.state.user.currentUser.currentRoom )
+            .map(({ name }) => (
+              <li key={name}>
+                {`${name}`}
+              { 
+                this.props.state.user.currentUser.currentRoom !== name 
+                ? <button name={name} onClick={this.handleJoinRoom}>Join</button> 
+                : <button name='Lobby' onClick={this.handleJoinRoom}>Leave</button>
+              }
+              </li>)
+            )
           }
         </ul>
         }
@@ -139,6 +160,8 @@ const mapStateToProps = state => ({ state })
 const mapDispatchToProps = dispatch => ({
   fetchData: () => dispatch(fetchData()),
   createNewRoom,
+  updateUserRoom: roomName => dispatch(updateUserRoom(roomName)),
+
 });
 
 

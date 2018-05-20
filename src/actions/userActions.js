@@ -1,16 +1,13 @@
 import firebase from 'firebase';
 
-export const updateCurrentUser = user => ({
+export const updateCurrentUser = userId => ({
   type: 'UPDATE_CURRENT_USER',
-  payload: user,
+  payload: userId,
 })
 
-export const updateUserRoom = (userId, roomName) => ({
+export const updateUserRoom = roomName => ({
   type: 'UPDATE_USER_ROOM',
-  payload: {
-    userId, 
-    roomName,
-  }
+  payload: roomName,
 })
   // see if room exists 
 
