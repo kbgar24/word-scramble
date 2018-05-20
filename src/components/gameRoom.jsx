@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 
+import LetterGenerator from './letterGenerator.jsx';
 
 export default class GameRoom extends Component {
 
@@ -9,8 +10,19 @@ export default class GameRoom extends Component {
     }
   }
 
+  handleNewLetters = (currentLetters) => {
+    firebase
+      .database()
+      .ref(`rooms/${this.props.currentUser.currentRoom}`)
+      .update({ currentLetters })
+  }
+
   render = () => {
     console.log('propsgameroom: ', this.props)
+    const currentRoom = this.props.currentUser.currentRoom;
+    const currentRoomObj = this.props.state.data.rooms.find(({ name }) => name === currentRoom)
+    const { currentLetters } = currentRoomObj;
+    console.log('currenRoomObj: ', currentRoomObj);
     return (
       <div>
         <h1>GameRoom!</h1>
@@ -35,7 +47,19 @@ export default class GameRoom extends Component {
             } 
         </ul>
 
-        <button name='Lobby' onClick={() => {this.props.handleLeaveRoom(this.props.currentUser.isAdmin)}}>Leave Room</button>
+        <LetterGenerator 
+          admin={this.props.currentUser.isAdmin}
+          alreadyPlayed={currentRoomObj.alreadyPlayed}
+          handleNewLetters={this.handleNewLetters}
+          currentLetters={currentLetters}
+        />
+
+        <button 
+          name='Lobby'
+          onClick={() => {this.props.handleLeaveRoom(this.props.currentUser.isAdmin)}}
+        >
+            Leave Room
+        </button>
         
       </div>
     )

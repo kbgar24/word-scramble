@@ -25,6 +25,16 @@ export default class LetterGenerator extends React.Component {
     }
   }
 
+  static getDerivedStateFromProps = (nextProps, prevState) => {
+    const { admin, alreadyPlayed, currentLetters } = nextProps;
+    return {
+      ...prevState,
+      admin,
+      alreadyPlayed,
+      currentLetters,
+    }
+  }
+
   scoreWord = word => {
     const { totalScore:oldScore } = this.state;
     let lastWordScore = 0;
@@ -43,7 +53,8 @@ export default class LetterGenerator extends React.Component {
 
   handleGenerate = () => {
     const letters = generateLetterList();
-    this.setState({letters})
+    const letterString = letters.join('');
+    this.props.handleNewLetters(letterString);
   }
 
   scrambleLetterList = () => {
@@ -81,15 +92,20 @@ export default class LetterGenerator extends React.Component {
   }
 
   render () {
-    const { letters, validWords, totalScore, lastWordScore } = this.state;
+    const { currentLetters, validWords, totalScore, lastWordScore } = this.state;
+    console.log('letGenState: ', this.state);
     return (
       <div>
         <h1>Word Scramble</h1>
-        <button onClick={this.handleGenerate}>Generate Letters</button>
+        { 
+          this.props.admin && 
+          <button onClick={this.handleGenerate}>Generate Letters</button>
+        
+        }
         <button onClick={this.scrambleLetterList}>Scramble Letters</button>
         <button onClick={this.seperateLettersByType}>Seperate Letters By Type</button>
         
-        <p>{ letters.join(' ') }</p>
+        <p>{currentLetters }</p>
 
         <ul>{ validWords.map((word, i) => <li key={i}>{word}</li>) }</ul>
         <h2>Total Score: { totalScore }</h2>

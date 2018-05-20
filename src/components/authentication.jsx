@@ -39,26 +39,42 @@ export default class Authentication extends Component {
 
   componentDidMount() {
     // this.props.authenticate()
-    this.unregisterAuthObserver = firebase.auth().onAuthStateChanged(
-      (user) => {
-        console.log('user: ', user);
-        let userId;
-        if (user) {
-          const currentUser = {
-            name: user.displayName,
-            isLoggedIn: true,
-            currentRoom: 'Lobby',
-            id: user.uid,
+    window.firebase = firebase;
+    const me = firebase.auth().currentUser;
+    this.setState({ loggedIn: !!me });
+    console.log('me: ', me);
+    console.log('firebaseAuth: ', firebase.auth())
+    if (!me){
+      this.unregisterAuthObserver = firebase.auth().onAuthStateChanged(
+        (user) => {
+          console.log('user: ', user);
+          let userId;
+          if (user) {
+            const currentUser = {
+              name: user.displayName,
+              isLoggedIn: true,
+              currentRoom: 'Lobby',
+              id: user.uid,
+            }
+            firebase.database().ref('users/' + user.uid).set(currentUser)
+            userId = user.uid
+          } else {
+            userId = '';
           }
-          firebase.database().ref('users/' + user.uid).set(currentUser)
-          userId = user.uid
-        } else {
-          userId = '';
+          this.props.updateCurrentUser(userId);
         }
-        
-        this.props.updateCurrentUser(userId);
-      }
-    )
+      )
+    }
+    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+      .then(function () {
+        console.log('local set!');
+        return firebase.auth().signInWithRedirect;
+      })
+      .catch(function (error) {
+        var errorCode = error.code;
+        var errorMessage = error.message;
+      });
+
   }
 
   componentWillUnmount() {
@@ -73,11 +89,13 @@ export default class Authentication extends Component {
     })
     firebase.auth().signOut()
     // this.props.signOutUser(id)
+
+    
   }
 
   render = () => {
     console.log('authprops: ', this.props);
-    if (!this.props.currentUser.name) {
+    if (!firebase.auth().currentUser) {
       return (
         <div>
           <h1>My App</h1>
