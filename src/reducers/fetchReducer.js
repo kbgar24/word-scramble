@@ -1,6 +1,6 @@
 const defaultState = {
   users: [],
-  gameRooms: {},
+  rooms: [],
   currentGame: {},
 }
 
@@ -12,17 +12,15 @@ export default ( state = defaultState, { type, payload }) => {
       // const gameId = state.currentGame;
       // const currentUser = payload.users && payload.users[userId] || {};
       // const currentGame = payload.gameRooms && payload.gameRooms[gameId] || {};
-      const allUsers = payload.users;
+      const {users:allUsers, rooms:roomObj} = payload;
       const users = Object.keys(allUsers)
         .filter(id => allUsers[id].isLoggedIn)
         .map(id => allUsers[id]);
-      console.log('loggedInUsers: : ', users);;
-      console.log('payload: ', payload);
+      const rooms = Object.keys(roomObj).map(name => ({ ...roomObj[name], name}));
       return {
         ...state,
         users,
-        // currentUser,
-        // currentGame,
+        rooms,
       }
 
     default: 

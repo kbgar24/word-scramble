@@ -10,6 +10,7 @@ import firebase from 'firebase'
 import { Provider, connect } from 'react-redux';
 import store from './store';
 import { fetchData } from './actions/fetchActions';
+import { createNewRoom } from './actions/roomActions';
 
 const config = {
   apiKey: "AIzaSyAKUjZ8dATJT0QNZqKWhVqTG9-bLT1JXa4",
@@ -71,10 +72,9 @@ class App extends Component {
 
   handleCreateNewRoom= (e) => {
     e.preventDefault();
-    const { id } = this.state.currentUser;
-    firebase.database().ref(`users/${id}`).update({
-      currentRoom: this.state.newRoom,
-    })
+    // const { id } = this.props.users.currentUser;
+    
+    this.props.createNewRoom(this.state.newRoom, this.props.state.user.currentUser.id)
     this.setState({ newRoom : '' })
     //render new room
     // update current room for user in db
@@ -94,7 +94,7 @@ class App extends Component {
       <div>
         <h1>My App</h1>
         { this.state.currentUser && (
-          <h2>Current User Id: {this.state.currentUser.name}</h2>
+          <h2>Current User Id: { this.state.currentUser.name }</h2>
         )
         }
       
@@ -113,6 +113,13 @@ class App extends Component {
               this.props.state.data.users.map(({name, id, currentRoom}) => <li key={id}>{`${name} - ${currentRoom}`}</li>)
             }
           </ul>
+
+        <h2>Current Rooms</h2>
+        <ul>
+          {
+            this.props.state.data.rooms.map(({ name }) => <li key={name}>{`${name}`}</li>)
+          }
+        </ul>
         }
         <form onSubmit={this.handleCreateNewRoom}>
           <input type='text' value={this.state.newRoom} onChange={this.newRoomChange}/>
@@ -130,7 +137,8 @@ class App extends Component {
 
 const mapStateToProps = state => ({ state })
 const mapDispatchToProps = dispatch => ({
-  fetchData: () => dispatch(fetchData())
+  fetchData: () => dispatch(fetchData()),
+  createNewRoom,
 });
 
 

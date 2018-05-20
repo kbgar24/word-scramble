@@ -11,11 +11,11 @@ export default ( state = defaultState, {type, payload} ) => {
         ...state,
         currentUser: payload,
       }
-    case 'UPDATE_USERS':
-      return {
-        ...state,
-        users: payload,
-      }
+    // case 'UPDATE_USER_ROOM':
+    //   return {
+    //     ...state,
+    //     users: payload,
+    //   }
     default: return state
   }
 }

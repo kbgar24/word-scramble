@@ -36,6 +36,8 @@ export const authenticate = () => () => {
         isLoggedIn: true,
         currentRoom: 'Lobby',
         id: user.uid,
+        score: 0,
+        isAdmin: false,
       }
       firebase.database().ref('users/' + user.uid).set(currentUser)
     } else {
