@@ -13,8 +13,8 @@ export default class GameRoom extends Component {
     return (
       <div>
         <h1>GameRoom!</h1>
-        <h2>Room Name: { this.props.currentUser.roomName }</h2>
-        <button onClick={this.props.handleLeaveRoom}>Leave Room</button>
+        <h2>Room Name: { this.props.currentUser.currentRoom }</h2>
+        <button name='Lobby' onClick={this.props.handleJoinRoom}>Leave Room</button>
       </div>
     )
   };

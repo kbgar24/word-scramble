@@ -146,10 +146,10 @@ class App extends Component {
           <input type='text' value={this.state.newRoom} onChange={this.newRoomChange}/>
           <input type='submit' value='Create New Room'/>
         </form>
-        { this.state.currentUser 
-          && this.state.currentUser.currentRoom
-          && this.state.currentUser.currentRoom !== 'Lobby'
-          && <GameRoom currentUser={this.state.currentUser} handleLeaveRoom={this.handleLeaveRoom}/> }
+        { this.props.state.user.currentUser 
+          && this.props.state.user.currentUser.currentRoom
+          && this.props.state.user.currentUser.currentRoom !== 'Lobby'
+          && <GameRoom currentUser={this.props.state.user.currentUser} handleJoinRoom={this.handleJoinRoom}/> }
       </div>
     )
   }
