@@ -16,7 +16,6 @@ export default class WordBuilder extends Component {
   }
 
   handleSubmit = (e) => {
-    console.log('submitWord: ', this.state.value)
     e.preventDefault();
     const wordStatus = this.props.isValidWord(this.state.value)
     const value = '';
@@ -26,6 +25,7 @@ export default class WordBuilder extends Component {
 
   render = () => {
     const { wordStatus } = this.state;
+    wordStatus && setTimeout(() => { this.setState({ wordStatus: '' })}, 2500);
     return(
     <div>
       <form onSubmit={this.handleSubmit}>

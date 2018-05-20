@@ -82,14 +82,13 @@ export default class LetterGenerator extends React.Component {
     }
 
 
-
-    // return (
-    //   isPlayedAlready
-    //   ? 'alreadyPlayedWords'
-    //   : isValid 
-    //   ? 'isValid'
-    //   : 'notValid'
-    // )
+    return (
+      isPlayedAlready
+      ? 'alreadyPlayed'
+      : isValid 
+      ? 'isValid'
+      : 'notValid'
+    )
   }
 
 
