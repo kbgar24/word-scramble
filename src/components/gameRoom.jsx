@@ -16,7 +16,13 @@ export default class GameRoom extends Component {
       .ref(`rooms/${this.props.currentUser.currentRoom}`)
       .update({ currentLetters })
   }
-
+  
+  handleValidWord = (word) => {
+    firebase
+      .database()
+      .ref(`rooms/${this.props.currentUser.currentRoom}/alreadyPlayed`)
+      .push(word)
+  }
   render = () => {
     console.log('propsgameroom: ', this.props)
     const currentRoom = this.props.currentUser.currentRoom;
@@ -52,6 +58,7 @@ export default class GameRoom extends Component {
           alreadyPlayed={currentRoomObj.alreadyPlayed}
           handleNewLetters={this.handleNewLetters}
           currentLetters={currentLetters}
+          handleValidWord={this.handleValidWord}
         />
 
         <button 

@@ -16,6 +16,7 @@ export default class WordBuilder extends Component {
   }
 
   handleSubmit = (e) => {
+    console.log('submitWord: ', this.state.value)
     e.preventDefault();
     const wordStatus = this.props.isValidWord(this.state.value)
     const value = '';

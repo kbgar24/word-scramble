@@ -18,19 +18,22 @@ export default class LetterGenerator extends React.Component {
   constructor() {
     super();
     this.state = {
-      letters: [],
-      validWords: [],
       totalScore: 0,
       lastWordScore: 0,
+      alreadyPlayedWords: [],
     }
   }
 
   static getDerivedStateFromProps = (nextProps, prevState) => {
     const { admin, alreadyPlayed, currentLetters } = nextProps;
+    const alreadyPlayedWords = alreadyPlayed
+    ? Object.keys(alreadyPlayed).map(key => alreadyPlayed[key])
+    : []
+    console.log('alreadyPlayedWords: ', alreadyPlayedWords);
     return {
       ...prevState,
       admin,
-      alreadyPlayed,
+      alreadyPlayedWords,
       currentLetters,
     }
   }
@@ -58,41 +61,41 @@ export default class LetterGenerator extends React.Component {
   }
 
   scrambleLetterList = () => {
-    const letters = fisherYatesShuffle(this.state.letters);
-    this.setState({ letters });
+    const currentLetters = fisherYatesShuffle(this.state.currentLetters.split('')).join('');
+    this.setState({ currentLetters });
   }
 
   seperateLettersByType = () => {
-    const letters = letterByTypeSeperator(this.state.letters);
-    this.setState({ letters })
+    const currentLetters = letterByTypeSeperator(this.state.currentLetters.split('')).join('');
+    this.setState({ currentLetters })
   }
 
   isValidWord = word => {
-    const { letters, validWords } = this.state;
-    const isPlayedAlready = validWords.includes(word);
-    const isValid = isWordInLetters(word, letters);
+    console.log('CHECKword: ', word);
+    const { currentLetters, alreadyPlayedWords } = this.state;
+    const isPlayedAlready = alreadyPlayedWords.includes(word);
+    const isValid = isWordInLetters(word, currentLetters.split(''));
     if (isValid && !isPlayedAlready) {
-      this.addValidWord(word);
+      // this.addValidWord(word);
+      this.props.handleValidWord(word);
       this.scoreWord(word);
     }
 
-    return (
-      isPlayedAlready
-      ? 'alreadyPlayed'
-      : isValid 
-      ? 'isValid'
-      : 'notValid'
-    )
+
+
+    // return (
+    //   isPlayedAlready
+    //   ? 'alreadyPlayedWords'
+    //   : isValid 
+    //   ? 'isValid'
+    //   : 'notValid'
+    // )
   }
 
 
-  addValidWord = word => {
-    const validWords = [...this.state.validWords, word].sort();
-    this.setState({ validWords });
-  }
 
   render () {
-    const { currentLetters, validWords, totalScore, lastWordScore } = this.state;
+    const { currentLetters, alreadyPlayedWords, totalScore, lastWordScore } = this.state;
     console.log('letGenState: ', this.state);
     return (
       <div>
@@ -107,7 +110,7 @@ export default class LetterGenerator extends React.Component {
         
         <p>{currentLetters }</p>
 
-        <ul>{ validWords.map((word, i) => <li key={i}>{word}</li>) }</ul>
+        <ul>{ alreadyPlayedWords.map((word, i) => <li key={i}>{word}</li>) }</ul>
         <h2>Total Score: { totalScore }</h2>
         <h3>Last Word Score: { lastWordScore }</h3>
         <WordBuilder isValidWord={this.isValidWord} addValidWord={this.addValidWord} />
