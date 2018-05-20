@@ -17,15 +17,11 @@ export default class WordBuilder extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    const wordStatus = this.props.isValidWord(this.state.value)
-    const value = '';
-    this.setState({ wordStatus, value })
+    this.props.isValidWord(this.state.value)
+    this.setState({ value: '' });
   }
 
-
   render = () => {
-    const { wordStatus } = this.state;
-    wordStatus && setTimeout(() => { this.setState({ wordStatus: '' })}, 2500);
     return(
     <div>
       <form onSubmit={this.handleSubmit}>
@@ -35,9 +31,6 @@ export default class WordBuilder extends Component {
           value='Check Word'
         />
       </form>
-        { wordStatus === 'isValid' && <h1>Valid Word!</h1> }
-        { wordStatus === 'alreadyPlayed' && <h1>Already Played!</h1> }
-        { wordStatus === 'notValid' && <h1>Invalid Word!</h1> }
     </div>
     )
   };

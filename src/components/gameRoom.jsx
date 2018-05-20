@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import LetterGenerator from './letterGenerator.jsx';
+import Timer from './timer.jsx';
 
 export default class GameRoom extends Component {
 
@@ -52,7 +53,8 @@ export default class GameRoom extends Component {
               ))
             } 
         </ul>
-
+        
+        <Timer />
         <LetterGenerator 
           admin={this.props.currentUser.isAdmin}
           alreadyPlayed={currentRoomObj.alreadyPlayed}
@@ -60,7 +62,6 @@ export default class GameRoom extends Component {
           currentLetters={currentLetters}
           handleValidWord={this.handleValidWord}
         />
-
         <button 
           name='Lobby'
           onClick={() => {this.props.handleLeaveRoom(this.props.currentUser.isAdmin)}}

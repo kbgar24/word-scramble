@@ -21,6 +21,7 @@ export default class LetterGenerator extends React.Component {
       totalScore: 0,
       lastWordScore: 0,
       alreadyPlayedWords: [],
+      wordStatus: '',
     }
   }
 
@@ -81,21 +82,22 @@ export default class LetterGenerator extends React.Component {
       this.scoreWord(word);
     }
 
-
-    return (
-      isPlayedAlready
+    const wordStatus = isPlayedAlready
       ? 'alreadyPlayed'
       : isValid 
       ? 'isValid'
       : 'notValid'
-    )
+    
+    this.setState({ wordStatus })
   }
 
 
 
   render () {
-    const { currentLetters, alreadyPlayedWords, totalScore, lastWordScore } = this.state;
+    const { wordStatus, currentLetters, alreadyPlayedWords, totalScore, lastWordScore } = this.state;
     console.log('letGenState: ', this.state);
+    wordStatus && setTimeout(() => { this.setState({ wordStatus: '' }) }, 2500);
+
     return (
       <div>
         <h1>Word Scramble</h1>
@@ -112,6 +114,9 @@ export default class LetterGenerator extends React.Component {
         <ul>{ alreadyPlayedWords.map((word, i) => <li key={i}>{word}</li>) }</ul>
         <h2>Total Score: { totalScore }</h2>
         <h3>Last Word Score: { lastWordScore }</h3>
+        {wordStatus === 'isValid' && <h1>Valid Word! {`+${lastWordScore}!`}</h1>}
+        {wordStatus === 'alreadyPlayed' && <h1>Already Played!</h1>}
+        {wordStatus === 'notValid' && <h1>Invalid Word!</h1>}
         <WordBuilder isValidWord={this.isValidWord} addValidWord={this.addValidWord} />
       </div>
     )
