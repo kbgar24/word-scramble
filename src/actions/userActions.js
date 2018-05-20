@@ -5,11 +5,19 @@ export const updateCurrentUser = userId => ({
   payload: userId,
 })
 
-export const updateUserRoom = roomName => ({
-  type: 'UPDATE_USER_ROOM',
+export const joinUserRoom = roomName => ({
+  type: 'JOIN_USER_ROOM',
   payload: roomName,
 })
-  // see if room exists 
+  
+export const leaveUserRoom = roomName => {
+  return ({
+    type: 'LEAVE_USER_ROOM',
+    payload: roomName,
+  })
+}
+
+// see if room exists 
 
 
     // if yes update

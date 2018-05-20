@@ -42,19 +42,21 @@ export default class Authentication extends Component {
     this.unregisterAuthObserver = firebase.auth().onAuthStateChanged(
       (user) => {
         console.log('user: ', user);
-        let currentUser;
+        let userId;
         if (user) {
-          currentUser = {
+          const currentUser = {
             name: user.displayName,
             isLoggedIn: true,
             currentRoom: 'Lobby',
             id: user.uid,
           }
           firebase.database().ref('users/' + user.uid).set(currentUser)
+          userId = user.uid
         } else {
-          currentUser = {};
+          userId = '';
         }
-        this.props.updateCurrentUser(currentUser);
+        
+        this.props.updateCurrentUser(userId);
       }
     )
   }

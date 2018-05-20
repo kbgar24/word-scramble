@@ -11,7 +11,7 @@ import { Provider, connect } from 'react-redux';
 import store from './store';
 import { fetchData } from './actions/fetchActions';
 import { createNewRoom } from './actions/roomActions';
-import { updateUserRoom } from './actions/userActions';
+import { joinUserRoom } from './actions/userActions';
 
 
 const config = {
@@ -30,7 +30,6 @@ class App extends Component {
 
     // this.database = fire.database().ref().child('users');
     this.state = {
-      currentUsers: [],
       newRoom: '',
       currentUser: {},
     }
@@ -42,24 +41,29 @@ class App extends Component {
   }
 
   static getDerivedStateFromProps = (nextProps, prevState) => {
-    const { users, currentUser = {} } = nextProps;
+    // const { currentUserId = '' } = nextProps;
+    const currentUserId = nextProps.state.user.currentUser;
+    const currentUser = currentUserId 
+    ? nextProps.state.data.users.find(({ id }) => currentUserId === id )
+    : {}
     // console.log('nextProps: ', nextProps);
-    const currentUsers = users 
-    ? Object.keys(users)
-      .filter(id => users[id].isLoggedIn)
-      .map(id => { 
-        console.log('users[id]: ', users[id])
-        return ({
-        id,
-        // ...users[id],
-      })
-      })
-    : [];
+    // const currentUsers = users 
+    // ? Object.keys(users)
+    //   .filter(id => users[id].isLoggedIn)
+    //   .map(id => { 
+    //     console.log('users[id]: ', users[id])
+    //     return ({
+    //     id,
+    //     // ...users[id],
+    //   })
+    //   })
+    // : [];
 
     // console.log('this: ', this);
+    console.log('CURRENTUSER!!: ', currentUser);
     return ({
       ...prevState,
-      currentUsers, currentUser 
+      currentUser,
     });
   }
 
@@ -91,14 +95,17 @@ class App extends Component {
   // }
 
   handleJoinRoom = ({ target: {  name } }) => {
-    const { id } = this.props.state.user.currentUser;
+    console.log('handleJoinRoom called: ')
+    const id = this.props.state.user.currentUser;
     firebase.database().ref(`users/${id}`).update({
       currentRoom: name,
     })
-    this.props.updateUserRoom(name);
+    // this.props.joinUserRoom(name);
   }
 
   render(){
+    console.log('Apstate: ', this.state);
+    
     console.log('Approps: ', this.props);
     return(
       <div>
@@ -149,7 +156,7 @@ class App extends Component {
         { this.props.state.user.currentUser 
           && this.props.state.user.currentUser.currentRoom
           && this.props.state.user.currentUser.currentRoom !== 'Lobby'
-          && <GameRoom currentUser={this.props.state.user.currentUser} handleJoinRoom={this.handleJoinRoom}/> }
+          && <GameRoom currentUser={this.props.state.user.currentUser} handleJoinRoom={this.handleJoinRoom} admin={this.props.state.user.currentUser.isAdmin} /> }
       </div>
     )
   }
@@ -160,7 +167,7 @@ const mapStateToProps = state => ({ state })
 const mapDispatchToProps = dispatch => ({
   fetchData: () => dispatch(fetchData()),
   createNewRoom,
-  updateUserRoom: roomName => dispatch(updateUserRoom(roomName)),
+  joinUserRoom: roomName => dispatch(joinUserRoom(roomName)),
 
 });
 

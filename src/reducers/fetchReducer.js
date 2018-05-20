@@ -7,7 +7,6 @@ const defaultState = {
 export default ( state = defaultState, { type, payload }) => {
   switch (type) {
     case 'FETCH_DATA':
-      console.log('lol')
       // const userId = state.currentUser.id;
       // const gameId = state.currentGame;
       // const currentUser = payload.users && payload.users[userId] || {};

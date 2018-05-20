@@ -26,6 +26,20 @@ _____ CC - Resume && Cover Letter _____
 6. Join game room
 7. Send invite to game room
 
+1. Room should have admin
+2. All users should see admin
+3. Admin leaving room should close room -> Send all other users to lobby
+
+Admin View
+- Start Button
+-  
+
+All View
+- Game Diaplay
+ - Exit Button
+
+
+
 users: {
   {
     name:
@@ -36,11 +50,7 @@ users: {
 
 
 rooms: {
-  garage: {
-    users: {
-      kendrick { score: 0, isAdmin: true },
-      kendrickTest { score: 0, isAdmin: false },
-    },
+  roomName: {
     currentLetters: 'abcdefghij'
     playedWords: {
       0: 'tom',

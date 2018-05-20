@@ -48,5 +48,7 @@ export const createNewRoom = (room, userId) => {
   })
   firebase.database().ref(`/users/${userId}`).update({
     currentRoom: room,
+    isAdmin: true,
   })
+  
 };
