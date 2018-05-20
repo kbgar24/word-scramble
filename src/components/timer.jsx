@@ -1,3 +1,12 @@
+/*********************
+ * 
+ * This is a custom-built timer component :)
+ * Unfortunately, it was unstable during multiuser play :(
+ * So I resorted to a 3rd-party module instead
+ * This component is thus provided here just as a reference 
+ * 
+ * **********************/
+
 import React, { Component } from 'react';
 
 export default class Timer extends Component {
@@ -7,6 +16,11 @@ export default class Timer extends Component {
     this.state = {
       value: 600
     }
+  }
+
+  static getDerivedStateFromProps = ({startTimer}, prevState) => {
+    startTimer 
+    return null;
   }
 
   handleTimerStart = () => {
@@ -22,8 +36,9 @@ export default class Timer extends Component {
 
   render() {
 
+    this.props.startTimer && this.handleTimerStart()
     const formatValue = (value) => {
-      const valueString = String(value)
+      const valueString = String(value).slice()
       const valueLength = String(value).length;
       return valueLength === 3
         ? valueString.slice(0, 2) + '.' + valueString.slice(2)

@@ -3,19 +3,38 @@ import React, { Component } from 'react';
 import LetterGenerator from './letterGenerator.jsx';
 import Timer from './timer.jsx';
 
+import Countdown from 'react-countdown-now';
+
 export default class GameRoom extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
+      startTimer: false,
     }
+  }
+
+  static getDerivedStateFromProps = (nextProps, prevState) => {
+    const { currentRoom } = nextProps.currentUser;
+    const { hasStarted  } = nextProps.state.data.rooms.find(({ name }) => name === currentRoom)
+    console.log('startingTimer!');
+    return hasStarted 
+    ? { ...prevState, startTimer: true }
+    : null
   }
 
   handleNewLetters = (currentLetters) => {
     firebase
       .database()
       .ref(`rooms/${this.props.currentUser.currentRoom}`)
-      .update({ currentLetters })
+      .update({ currentLetters, hasStarted: true })
+    
+    setTimeout(() => {
+      firebase
+        .database()
+        .ref(`rooms/${this.props.currentUser.currentRoom}`)
+        .update({ hasStarted: false })
+    }, 60000)
   }
   
   handleValidWord = (word) => {
@@ -53,8 +72,23 @@ export default class GameRoom extends Component {
               ))
             } 
         </ul>
+        {
+          this.state.startTimer
+            ? <Countdown
+              date={Date.now() + 60000}
+              intervalDelay={0}
+              precision={3}
+              renderer={props => <div>{(props.total / 1000).toFixed(2)}</div>}
+            // controlled={true}
+            // getTimeDifference={() => <div>{props.total}</div>}
+
+            />
+            : <div>60.00</div>
+        }
         
-        <Timer />
+       
+      
+        {/* <Timer startTimer={this.state.startTimer} /> */}
         <LetterGenerator 
           admin={this.props.currentUser.isAdmin}
           alreadyPlayed={currentRoomObj.alreadyPlayed}
