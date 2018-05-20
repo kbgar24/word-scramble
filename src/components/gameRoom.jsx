@@ -17,10 +17,10 @@ export default class GameRoom extends Component {
   static getDerivedStateFromProps = (nextProps, prevState) => {
     const { currentRoom } = nextProps.currentUser;
     const { hasStarted  } = nextProps.state.data.rooms.find(({ name }) => name === currentRoom)
-    console.log('startingTimer!');
-    return hasStarted 
-    ? { ...prevState, startTimer: true }
-    : null
+    hasStarted
+    ? console.log('startingTimer!')
+    : console.log('stoppingTimer!')
+    return { ...prevState, startTimer: hasStarted }
   }
 
   handleNewLetters = (currentLetters) => {
@@ -34,7 +34,7 @@ export default class GameRoom extends Component {
         .database()
         .ref(`rooms/${this.props.currentUser.currentRoom}`)
         .update({ hasStarted: false })
-    }, 60000)
+    }, 20000)
   }
   
   handleValidWord = (word) => {
@@ -43,8 +43,12 @@ export default class GameRoom extends Component {
       .ref(`rooms/${this.props.currentUser.currentRoom}/alreadyPlayed`)
       .push(word)
   }
+
+
   render = () => {
     console.log('propsgameroom: ', this.props)
+    console.log('stateGameroom: ', this.state)
+    
     const currentRoom = this.props.currentUser.currentRoom;
     const currentRoomObj = this.props.state.data.rooms.find(({ name }) => name === currentRoom)
     const { currentLetters } = currentRoomObj;
@@ -75,7 +79,7 @@ export default class GameRoom extends Component {
         {
           this.state.startTimer
             ? <Countdown
-              date={Date.now() + 60000}
+              date={Date.now() + 20000}
               intervalDelay={0}
               precision={3}
               renderer={props => <div>{(props.total / 1000).toFixed(2)}</div>}
@@ -83,7 +87,7 @@ export default class GameRoom extends Component {
             // getTimeDifference={() => <div>{props.total}</div>}
 
             />
-            : <div>60.00</div>
+            : <div>20.00</div>
         }
         
        
