@@ -19,9 +19,9 @@ export default class GameRoom extends Component {
   }
 
   static getDerivedStateFromProps = (nextProps, prevState) => {
-    const { currentUser: { currentRoom, lastWordScore, totalScore } = {} } = nextProps
+    const { currentUser: { currentRoom, lastWordScore = 0, totalScore = 0 } } = nextProps
     console.log('nextProps gameRoom: ', nextProps);
-    
+
     const { hasStarted, startTime, showScoreboard, scoreBoard  } = nextProps.state.data.rooms.find(({ name }) => name === currentRoom)
     // let { scoreBoard, hasStarted: prevHasStarted } = prevState;
     // hasStarted && (scoreBoard = false);

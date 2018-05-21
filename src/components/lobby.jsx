@@ -41,7 +41,25 @@ export default class Lobby extends Component {
 
   static getDerivedStateFromProps = (nextProps, prevState) => {
     // const { currentUserId = '' } = nextProps;
+    const { pathname } = nextProps.location;
+    const roomId = pathname.slice(10);
+    
+    let newRoom;
+    
+    if (roomId) {
+      nextProps.history.push('/');
+      newRoom = nextProps.state.data.rooms.find(({id}) => id === roomId);
+    }
+
     const currentUserId = nextProps.state.user.currentUser;
+    
+    if (newRoom) {
+      firebase.database().ref(`users/${currentUserId}`).update({
+        currentRoom: newRoom.name,
+        isAdmin: false,
+      })
+    }
+
     const currentUser = currentUserId
       ? nextProps.state.data.users.find(({ id }) => currentUserId === id)
       : {}
@@ -128,7 +146,7 @@ export default class Lobby extends Component {
           {
             this.state.currentUser && <h2>Current User Id: {this.state.currentUser.name}</h2>
           }
-          { <LetterGenerator />}
+          {/* { <LetterGenerator />} */}
 
           <h2>Logged in Users</h2>
           <ul>

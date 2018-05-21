@@ -68,12 +68,11 @@ class App extends Component {
           <Route path='/login' component={ Login }></Route>
           <AuthenticationGateway>
             {/* <LoadingComponent> */}
-              <Route path='/' component={ Lobby } exact={ true } ></Route>
-              <Route path='/gameroom' component={ GameRoom } ></Route>
-              <Route path='/chicken' render={ () => <div>Fried chicken!!</div> } exact={true} ></Route>
+              <Route path='/' component={ Lobby } ></Route>
+              {/* <Route path='/chicken' render={ () => <div>Fried chicken!!</div> } exact={true} ></Route> */}
             {/* </LoadingComponent>/> */}
           </AuthenticationGateway>
-          <Route component={ NotFoundPage }></Route>
+              <Route component={ NotFoundPage }></Route>
         </Switch>
       {/* </LoadingComponent> */}
     </BrowserRouter> 
