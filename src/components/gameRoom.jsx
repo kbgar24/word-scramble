@@ -49,7 +49,7 @@ export default class GameRoom extends Component {
   }
   
   handleValidWord = (word) => {
-    const totalScore = this.scoreWord(word);
+    const { totalScore, lastWordScore } = this.scoreWord(word);
     firebase
       .database()
       .ref(`rooms/${this.props.currentUser.currentRoom}/alreadyPlayed`)
@@ -58,7 +58,7 @@ export default class GameRoom extends Component {
     firebase 
       .database()
       .ref(`users/${this.props.currentUser.id}`)
-      .update({ totalScore })
+      .update({ totalScore, lastWordScore })
   }
 
   handleGameOver = () => {
@@ -108,7 +108,7 @@ export default class GameRoom extends Component {
 
     this.setState({ totalScore, lastWordScore })
 
-    return totalScore;
+    return { totalScore, lastWordScore };
 
 
   }

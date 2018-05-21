@@ -10,6 +10,8 @@ import {
   isRealWord,
 } from '../helpers';
 
+let renderCount = 0;
+
 import WordBuilder from './wordBuilder.jsx';
 
 
@@ -77,7 +79,10 @@ export default class LetterGenerator extends React.Component {
 
 
   render () {
+    
+    
     const { wordStatus, currentLetters, alreadyPlayedWords, totalScore, lastWordScore } = this.state;
+ 
     console.log('letGenState: ', this.state);
     wordStatus && setTimeout(() => { this.setState({ wordStatus: '' }) }, 2500);
 

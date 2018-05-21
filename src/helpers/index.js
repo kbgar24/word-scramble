@@ -59,19 +59,19 @@ export const generateLetterList = () => {
   
   const vowelCount = Math.floor(Math.random() * 6) + 2;
   const consonantCount = 9 - vowelCount;
-  const unsortedLetters = [];
+  const letters = [];
 
   for (let i = 0; i < vowelCount; i++) {
     const vowel = vowels[Math.floor(Math.random() * vowels.length)]
-    unsortedLetters.push(vowel);
+    letters.push(vowel);
   }
 
   for (let i = 0; i < consonantCount; i++) {
     const consonant = consonants[Math.floor(Math.random() * vowels.length)]
-    unsortedLetters.push(consonant);
+    letters.push(consonant);
   }
 
-  return unsortedLetters.sort();
+  return letters;
 
 }
 
