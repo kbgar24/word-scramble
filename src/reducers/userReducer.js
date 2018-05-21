@@ -1,3 +1,5 @@
+import { Action } from "rxjs/scheduler/Action";
+
 const defaultState = {
   currentUser: '',
 }
@@ -5,11 +7,14 @@ const defaultState = {
 export default ( state = defaultState, {type, payload} ) => {
   switch (type) {
     case 'UPDATE_CURRENT_USER':
-    console.log('STATE: ', state);
       return {
         ...state,
         currentUser: payload,
       }
+
+    case 'GET_USER':
+      return payload;
+
     // case 'JOIN_USER_ROOM':
     //   console.log('STATE!!!:  ', state)
     //   return {
@@ -29,6 +34,7 @@ export default ( state = defaultState, {type, payload} ) => {
     //       isAdmin: true,
     //     }
     //   }
-    default: return state
+    default: 
+      return state;
   }
 }

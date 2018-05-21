@@ -1,3 +1,5 @@
+import { Action } from "rxjs/scheduler/Action";
+
 const defaultState = {
   users: [],
   rooms: [],
@@ -21,6 +23,9 @@ export default ( state = defaultState, { type, payload }) => {
         users,
         rooms,
       }
+
+    case 'FETCH_ROOM_DATA':
+      return payload;
 
     default: 
       return state;

@@ -46,6 +46,8 @@ export const createNewRoom = (room, userId) => {
     canJoin: true,
     isOver: false,
     startTime: false,
+    showScoreboard: false,
+    scoreBoard: false,
   })
   firebase.database().ref(`/users/${userId}`).update({
     currentRoom: room,

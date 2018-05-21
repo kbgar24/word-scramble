@@ -1,4 +1,34 @@
 import firebase from 'firebase';
+import { auth, googleProvider, twitterProvider } from '../firebase';
+
+export const getUser = () => {
+  return dispatch => {
+    dispatch({
+      type: 'USER_STATUS',
+      payload: true
+    });
+    auth.onAuthStateChanged(({uid}) => {
+      dispatch({
+        type: 'GET_USER',
+        payload: uid
+      });
+      dispatch({
+        type: 'USER_STATUS',
+        payload: false
+      });
+    });
+  };
+}
+
+
+export function logout() {
+  return dispatch => auth.signOut();
+}
+
+export function googleLogin() {
+  return dispatch => auth.signInWithPopup(googleProvider);
+}
+
 
 export const updateCurrentUser = userId => ({
   type: 'UPDATE_CURRENT_USER',
