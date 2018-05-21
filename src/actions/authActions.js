@@ -1,5 +1,6 @@
-import firebase from 'firebase';
 import { updateCurrentUser } from './userActions';
+import { auth, database } from '../firebase';
+import firebase from 'firebase';
 
 const config = {
   apiKey: "AIzaSyAKUjZ8dATJT0QNZqKWhVqTG9-bLT1JXa4",
@@ -28,7 +29,7 @@ const uiConfig = {
 
 export const authenticate = () => () => {
   console.log('authenticate called!');
-  firebase.auth().onAuthStateChanged(user => {
+  auth.onAuthStateChanged(user => {
     let currentUser;
     if (user) {
       currentUser = {
@@ -39,7 +40,7 @@ export const authenticate = () => () => {
         score: 0,
         isAdmin: false,
       }
-      firebase.database().ref('users/' + user.uid).set(currentUser)
+      database.ref('users/' + user.uid).set(currentUser)
     } else {
       currentUser = {};
     }
@@ -48,9 +49,9 @@ export const authenticate = () => () => {
 }
 
 export const signOut = id => dispatch => {
-  firebase.database().ref(`/users/${id}`).set({
+  database.ref(`/users/${id}`).set({
     isLoggedIn: false,
   })
-  firebase.auth().signOut();
+  // auth.signOut();
   dispatch(updateCurrentUser({}))
 }

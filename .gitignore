@@ -2,3 +2,4 @@ node_modules/
 public/bundle.js
 .vscode/
 tasks.md
+firebase-debug.log

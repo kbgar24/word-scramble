@@ -14,32 +14,45 @@ import { createNewRoom } from './actions/roomActions';
 import { joinUserRoom, logout } from './actions/userActions';
 import LoadingComponent from './components/loadingComponent.jsx';
 import Login from './components/login.jsx';
+import { signOut } from './actions/authActions';
 // import Lobby from './containers/lobbyContainer';
 // console.log('lobby: ', Lobby);
 console.log('login: ', Login);
 import AuthenticationGateway from './containers/AuthenticationGateway';
 
+
 const NotFoundPage = () => <div> 404! - NOT FOUND </div>
-const RandomPage = (props) => (
+class RandomPage extends React.Component { 
+  constructor(props){
+    super(props)
+  }
+  unregisterAuthObserver = () => {}
+
+  render = () => (
   <div>
     <h1>Main Page</h1>
     You are logged in!
-    <button 
+    {/* <button 
       onClick={() => {
-        console.log('rops: ', props)
+        console.log('this: ', this);
+        console.log('rops: ', this.props)
         console.log('logout');
-        props.logout();
+        this.props.signOut();
+        console.log(this.props)
+        this.props.history.push('/login');
       }}
     >
-      Sign Out
-    </button>
+      Sign Out */}
+    {/* </button> */}
   </div>)
+}
+const mapStateToProps = state => ({ state })
 
 const mapDispatchToProps = dispatch => ({
-  logout: () => dispatch(logout())
+  signOut: () => dispatch(signOut()),
 });
 
-const Random = withRouter(connect(null, mapDispatchToProps)(RandomPage));
+const Random = withRouter(connect(mapStateToProps, mapDispatchToProps)(RandomPage));
 
 class App extends Component {
   
@@ -52,12 +65,12 @@ class App extends Component {
     <BrowserRouter>
       {/* <LoadingComponent> */}
          <Switch>
-          <Route path='/' component={ Random } exact={ true } ></Route>
           <Route path='/login' component={ Login }></Route>
-          {/* <AuthenticationGateway> */}
+          <AuthenticationGateway>
+            <Route path='/' component={ Random } exact={ true } ></Route>
             {/* <Route path='/gameroom' component={GameRoom} ></Route> */}
             {/* <Route path='/gameroom/:id' component={ GameRoom } ></Route> */}
-          {/* </AuthenticationGateway> */}
+          </AuthenticationGateway>
           <Route component={ NotFoundPage }></Route>
         </Switch>
       {/* </LoadingComponent> */}
@@ -65,6 +78,8 @@ class App extends Component {
     )
   }
 }
+
+
 
 ReactDOM.render(
   <Provider store={store}>

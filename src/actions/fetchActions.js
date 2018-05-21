@@ -34,26 +34,26 @@ import { database } from '../firebase';
 //   })
 // );
 
-export function getAllData() {
+export function fetchAllData() {
   return dispatch => {
-    dispatch({
-      type: 'FETCH_STATUS',
-      payload: true
-    });
-    database.on('value', snapshot => {
+    // dispatch({
+    //   type: 'FETCH_STATUS',
+    //   payload: true
+    // });
+    database.ref().on('value', snapshot => {
+      // dispatch({
+      //   type: 'FETCH_STATUS',
+      //   payload: false
+      // });
       dispatch({
-        type: 'FETCH_STATUS',
-        payload: false
-      });
-      dispatch({
-        type: 'FETCH_ALL_DATA',
+        type: 'FETCH_DATA',
         payload: snapshot.val()
       });
-    }, () => {
-      dispatch({
-        type: 'FETCH_STATUS',
-        payload: -1
-      })
+    // }, () => {
+    //   dispatch({
+    //     type: 'FETCH_STATUS',
+    //     payload: -1
+    //   })
     });
   };
 }

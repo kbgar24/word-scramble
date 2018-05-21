@@ -2,22 +2,74 @@ import React, { Component } from 'react';
 // import SimpleBox from '../Components/SimpleBox';
 // import InputField from '../Components/InputField';
 // import FooterFormButton from '../Components/FooterFormButton';
-// import firebase from 'firebase';
+import firebase from 'firebase';
 import { withRouter } from 'react-router-dom';
 import { login, getUser, googleLogin } from '../actions/userActions';
 import { connect } from 'react-redux';
 import { uiConfig } from '../config';
-import { auth } from '../firebase';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
-
+import { updateCurrentUser } from '../actions/userActions.js';
+import { fetchAllData } from '../actions/fetchActions.js';
+import { auth, database } from '../firebase';
 
 // import ErrorAlert from '../Components/ErrorAlert';
-
-export default class Login extends Component {
+class Login extends Component {
   constructor(props) {
     super(props);
+    this.state = {}
   }
 
+  unregisterAuthObserver = () => { }
+
+  componentDidMount() {
+    // this.props.authenticate()
+    // window.firebase = firebase;
+    // const me = auth.currentUser;
+    // this.setState({ loggedIn: !!me });
+    // console.log('me: ', me);
+    // console.log('firebaseAuth: ', auth)
+    // if (!me) {
+    this.unregisterAuthObserver = auth.onAuthStateChanged(
+        (user) => {
+          console.log('user: ', user);
+          let userId;
+          if (user) {
+            const currentUser = {
+              name: user.displayName,
+              isLoggedIn: true,
+              currentRoom: 'Lobby',
+              id: user.uid,
+            }
+            database.ref('users/' + user.uid).set(currentUser)
+            fetchAllData();
+            userId = user.uid
+          } else {
+            userId = '';
+          }
+          this.props.updateCurrentUser(userId);
+          this.props.fetchAllData();
+        }
+      )
+    // }
+    auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+      .then(function () {
+        console.log('local set!');
+        return auth.signInWithRedirect;
+      })
+      .catch(function (error) {
+        var errorCode = error.code;
+        var errorMessage = error.message;
+      });
+
+  }
+
+  componentWillUnmount() {
+    this.unregisterAuthObserver()
+    // console.log('a; ', a);
+    // console.log('unregister: ', this.unregisterAuthObserver);
+    // this.unregisterAuthObserver && this.unregisterAuthObserver();
+    
+  }
   // componentWillMount() {
   //   if (this.props.user !== null) {
   //     this.props.history.push('/');
@@ -32,14 +84,14 @@ export default class Login extends Component {
   // }
 
 
-  // static getDerivedStateFromProps = nextProps => {
-  //   const { user, history } = nextProps;
-  //   if (Object.keys(user).length) {
-  //     this.props.history.push('/');
-  //   }
-  //   // nextProps.user !== null && nextProps.history.push('/');
-  //   return null;
-  // }
+  static getDerivedStateFromProps = nextProps => {
+    const { user, history } = nextProps;
+    if (user.currentUser) {
+      history.push('/');
+    }
+    // nextProps.user !== null && nextProps.history.push('/');
+    return null;
+  }
  
 
 
@@ -83,4 +135,9 @@ function mapStateToProps(state, ownProps) {
   return { user: state.user };
 }
 
-// export default withRouter(connect(mapStateToProps)(Login));
+const mapDispatchToProps = dispatch => ({
+  updateCurrentUser: (userId) => dispatch(updateCurrentUser(userId)),
+  fetchAllData: () => dispatch(fetchAllData()),
+})
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Login));
