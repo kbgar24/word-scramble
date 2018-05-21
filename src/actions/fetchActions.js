@@ -50,10 +50,10 @@ export function fetchAllData() {
         payload: snapshot.val()
       });
     // }, () => {
-    //   dispatch({
-    //     type: 'FETCH_STATUS',
-    //     payload: -1
-    //   })
+      // dispatch({
+      //   type: 'FETCH_STATUS',
+      //   payload: -1
+      // })
     });
   };
 }

@@ -4,7 +4,7 @@ import { BrowserRouter, Route, Link, Switch, withRouter } from 'react-router-dom
 // import LetterGenerator from './components/letterGenerator.jsx';
 // import Authentication from './components/authentication.jsx';
 // import Authentication from './containers/authenticationContainer';
-// import GameRoom from './containers/gameRoomContainer';
+import GameRoom from './containers/gameRoomContainer';
 // import fire from './config/fire';
 // import firebase from 'firebase'
 import { Provider, connect } from 'react-redux';
@@ -15,7 +15,7 @@ import { joinUserRoom, logout } from './actions/userActions';
 import LoadingComponent from './components/loadingComponent.jsx';
 import Login from './components/login.jsx';
 import { signOut } from './actions/authActions';
-// import Lobby from './containers/lobbyContainer';
+import Lobby from './containers/lobbyContainer';
 // console.log('lobby: ', Lobby);
 console.log('login: ', Login);
 import AuthenticationGateway from './containers/AuthenticationGateway';
@@ -67,9 +67,11 @@ class App extends Component {
          <Switch>
           <Route path='/login' component={ Login }></Route>
           <AuthenticationGateway>
-            <Route path='/' component={ Random } exact={ true } ></Route>
-            {/* <Route path='/gameroom' component={GameRoom} ></Route> */}
-            {/* <Route path='/gameroom/:id' component={ GameRoom } ></Route> */}
+            {/* <LoadingComponent> */}
+              <Route path='/' component={ Lobby } exact={ true } ></Route>
+              <Route path='/gameroom' component={ GameRoom } ></Route>
+              <Route path='/chicken' render={ () => <div>Fried chicken!!</div> } exact={true} ></Route>
+            {/* </LoadingComponent>/> */}
           </AuthenticationGateway>
           <Route component={ NotFoundPage }></Route>
         </Switch>

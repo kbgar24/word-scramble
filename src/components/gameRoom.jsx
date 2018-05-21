@@ -4,6 +4,7 @@ import Timer from './timer.jsx';
 // import Countdown from 'react-countdown-now';
 import CountdownWrapper from './countdownWrapper.jsx';
 import { isRealWord, scoreMap, mapObjToArray } from '../helpers';
+import { database } from '../firebase';
 
 export default class GameRoom extends Component {
 
@@ -18,31 +19,32 @@ export default class GameRoom extends Component {
   }
 
   static getDerivedStateFromProps = (nextProps, prevState) => {
-    // const { currentUser: { currentRoom, lastWordScore, totalScore } = {} } = nextProps
-
-    // const { hasStarted, startTime, showScoreboard, scoreBoard  } = nextProps.state.data.rooms.find(({ name }) => name === currentRoom)
-    // // let { scoreBoard, hasStarted: prevHasStarted } = prevState;
-    // // hasStarted && (scoreBoard = false);
-    // return  { ...prevState, currentRoom, hasStarted, scoreBoard, startTime, showScoreboard, lastWordScore, totalScore }
+    const { currentUser: { currentRoom, lastWordScore, totalScore } = {} } = nextProps
+    console.log('nextProps gameRoom: ', nextProps);
+    
+    const { hasStarted, startTime, showScoreboard, scoreBoard  } = nextProps.state.data.rooms.find(({ name }) => name === currentRoom)
+    // let { scoreBoard, hasStarted: prevHasStarted } = prevState;
+    // hasStarted && (scoreBoard = false);
+    return  { ...prevState, currentRoom, hasStarted, scoreBoard, startTime, showScoreboard, lastWordScore, totalScore }
 
   }
 
   handleNewLetters = (currentLetters) => {
     // this.setState({startTime: Date.now()})
-    firebase.database()
+    database
       .ref(`rooms/${this.props.currentUser.currentRoom}`)
       .update({ showScoreboard: false, currentLetters, hasStarted: true, startTime: Date.now() })
     
     this.props.state.data.users.forEach(({currentRoom, id}) => {
       if (currentRoom === this.state.currentRoom){
-        firebase.database()
+        database
           .ref(`users/${id}`)
           .update({ totalScore: 0, lastWordScore: 0 })
       }
     })
       
       setTimeout(() => {
-      firebase.database()
+      database
         .ref(`rooms/${this.props.currentUser.currentRoom}`)
         .update({ hasStarted: false, startTime: false, showScoreboard: true })
     }, 20100)
@@ -51,13 +53,11 @@ export default class GameRoom extends Component {
   
   handleValidWord = (word) => {
     const { totalScore, lastWordScore } = this.scoreWord(word);
-    firebase
-      .database()
+    database
       .ref(`rooms/${this.props.currentUser.currentRoom}/alreadyPlayed`)
       .push(word)
 
-    firebase 
-      .database()
+    database
       .ref(`users/${this.props.currentUser.id}`)
       .update({ totalScore, lastWordScore })
   }
@@ -81,12 +81,11 @@ export default class GameRoom extends Component {
         : -1
       ))
 
-    firebase
-      .database()
+    database
       .ref(`rooms/${this.props.currentUser.currentRoom}`)
       .update({ scoreBoard, currentLetters: '', alreadyPlayed: false })
 
-    console.log('rawScoreboard: ', scoreBoard);
+    // console.log('rawScoreboard: ', scoreBoard);
         // this.setState({ scoreBoard })
     // const scoreBoard = this.props.state.data.users
       // .filter(({currentRoom}) => currentRoom === this.state.currentRoom)
@@ -120,7 +119,7 @@ export default class GameRoom extends Component {
   // }
 
   render = () => {
-    console.log('propsgameroom: ', this.props)
+    // console.log('propsgameroom: ', this.props)
     // console.log('stateGameroom: ', this.state)
     const { totalScore, lastWordScore, scoreBoard } = this.state;
     const currentRoom = this.props.currentUser.currentRoom;
@@ -140,7 +139,7 @@ export default class GameRoom extends Component {
           this.state.showScoreboard && this.state.scoreBoard && 
           <div>
             <h2>ScoreBoard</h2>
-            { console.log('scoreboard!!!!: ', this.state.scoreboard) }
+            {/* { console.log('scoreboard!!!!: ', this.state.scoreboard) } */}
             <ol>
               { 
                 this.state.scoreBoard.map(({name, totalScore}, i) => (

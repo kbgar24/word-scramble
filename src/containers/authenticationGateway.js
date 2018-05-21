@@ -1,16 +1,17 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Redirect } from 'react-router-dom';
 import { getUser } from '../actions/userActions';
 import { fetchAllData } from '../actions/fetchActions';
 import firebase from 'firebase';
-window.firebase = firebase;
 
 class AuthenticationGateway extends Component {
   
   constructor(props){
     super(props)
     this.state = {
+      redirectToLogin: false,
+      referrer: '/',
     }
   }
 
@@ -18,23 +19,34 @@ class AuthenticationGateway extends Component {
 
   }
 
-  static getDerivedStateFromProps = ({user, history, getUser, getAllData}) => {
-    
+  static getDerivedStateFromProps = ({ user, history, getUser, fetchAllData}) => {
+    // fetchAllData();
+
+    // user tried to access '/' w/out being logged in
+
+    // user tried to access '/gameroom w/out being logged in
+
+
+
     const prevPath = history.location.pathname
-    console.log('prevPath: ', prevPath);
+    // console.log('prevPath: ', prevPath);
     console.log('user: ', user);
     if (!Object.keys(user).length) {
       history.push('/login');
+      return { redirectToLogin: true, referrer: prevPath }
     } else {
-      getUser();
-      fetchAllData();
+      // console.log('1 is the ')
+      // getUser();
+      // fetchAllData();
+      // console.log('loneliest number');
+      return { redirectToLogin: false, referrer: '/'  }
     }
     // } else {
     //   history.push(prevPath);
     // }
 
     // return prevPath !== '/login' { prevPath } : null,
-    return null;
+    
   }
   // componentDidUpdate() {
   //   const { userLoading, user } = this.props;
@@ -46,10 +58,19 @@ class AuthenticationGateway extends Component {
 
   render() {
     const { user, children, userLoading } = this.props;
-    console.log('user!!!!!: ', user);
+    // console.log('user!!!!!: ', user);
     
+    return this.state.redirectToLogin
+    ? (
+      <Redirect 
+        to={{
+          pathname: '/login',
+          state: { referrer: this.state.referrer }
+        }}
+      /> 
+      )
+    : children
     // return ( user) ? children : <div>lol</div>
-    return children;
   }
 }
 
@@ -59,8 +80,8 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  getAllData: () => dispatch(getAllData),
-  getUser: () => dispatch(getUser),
+  fetchAllData: () => dispatch(fetchAllData()),
+  getUser: () => dispatch(getUser()),
 })
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(AuthenticationGateway));

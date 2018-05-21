@@ -22,6 +22,7 @@ class Login extends Component {
   unregisterAuthObserver = () => { }
 
   componentDidMount() {
+    this.props.fetchAllData();
     // this.props.authenticate()
     // window.firebase = firebase;
     // const me = auth.currentUser;
@@ -86,8 +87,13 @@ class Login extends Component {
 
   static getDerivedStateFromProps = nextProps => {
     const { user, history } = nextProps;
+    // console.log('%%%%%%%%%')
+    // console.log('history: ', history.location.state);
+    // history.location.pathname);
+    // console.log('%%%%%%%%%')
+    const desiredPath = history.location.state ? history.location.state.referrer : '/'
     if (user.currentUser) {
-      history.push('/');
+      history.push(desiredPath);
     }
     // nextProps.user !== null && nextProps.history.push('/');
     return null;

@@ -2,7 +2,7 @@ import 'babel-polyfill';
 // import fire from '../config/fire';
 import firebase from 'firebase'
 
-
+import uuid from 'uuid';
 // const database = fire.database().ref();
 
 // firebase.database().ref().on('value', (snapshot) => snapshot.val()) })
@@ -38,7 +38,7 @@ const database = firebase.database().ref();
 //   isOver: false
 // }
 
-export const createNewRoom = (room, userId) => {
+export const createNewRoom = (room, userId, roomId) => {
   console.log('createnewroomcalled');
   firebase.database().ref(`/rooms/${room}`).set({
     currentLetters: '',
@@ -48,6 +48,7 @@ export const createNewRoom = (room, userId) => {
     startTime: false,
     showScoreboard: false,
     scoreBoard: false,
+    id: roomId,
   })
   firebase.database().ref(`/users/${userId}`).update({
     currentRoom: room,

@@ -1,8 +1,9 @@
 import { connect } from 'react-redux';
-// import Lobby from '../components/lobby.jsx';
+import Lobby from '../components/lobby.jsx';
 import { fetchData } from '../actions/fetchActions';
 import { createNewRoom } from '../actions/roomActions';
 import { joinUserRoom } from '../actions/userActions';
+import { withRouter } from 'react-router-dom';
 
 const mapStateToProps = state => ({ state })
 const mapDispatchToProps = dispatch => ({
@@ -12,4 +13,4 @@ const mapDispatchToProps = dispatch => ({
 
 });
 
-// export default connect(mapStateToProps, mapDispatchToProps)(Lobby);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Lobby));
