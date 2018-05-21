@@ -1,10 +1,10 @@
 import { Action } from "rxjs/scheduler/Action";
 
-const defaultState = {
-  currentUser: '',
-}
+// const defaultState = {
+//   currentUser: '',
+// }
 
-export default ( state = defaultState, {type, payload} ) => {
+export default ( state = {}, {type, payload} ) => {
   switch (type) {
     case 'UPDATE_CURRENT_USER':
       return {

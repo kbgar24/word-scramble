@@ -21,7 +21,7 @@ export const getUser = () => {
 }
 
 
-export function logout() {
+export const logout = () => {
   return dispatch => auth.signOut();
 }
 

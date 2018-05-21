@@ -6,7 +6,6 @@ import { getAllData } from '../actions/fetchActions';
 
 class LoadingComponent extends Component {
   componentWillMount() {
-    console.log('this.props: ', this.props);
     const { userLoading, dataLoading } = this.props;
     if (userLoading === undefined) {
       this.props.getUser();
@@ -19,6 +18,7 @@ class LoadingComponent extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.dataLoading === -1 && nextProps.user !== null) {
+      console.log('nextProps.user', nextProps.user)
       this.props.getAllData();
     }
   }
