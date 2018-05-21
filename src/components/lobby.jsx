@@ -43,14 +43,13 @@ export default class Lobby extends Component {
     // const { currentUserId = '' } = nextProps;
     const { pathname } = nextProps.location;
     const roomId = pathname.slice(10);
-    
+    console.log('roomID: ', roomId)
     let newRoom;
     
     if (roomId) {
-      nextProps.history.push('/');
       newRoom = nextProps.state.data.rooms.find(({id}) => id === roomId);
     }
-
+    
     const currentUserId = nextProps.state.user.currentUser;
     
     if (newRoom) {
@@ -122,6 +121,7 @@ export default class Lobby extends Component {
         currentRoom: 'Lobby',
       })
     }
+    this.props.history.replace('/');
   }
 
 

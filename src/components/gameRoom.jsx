@@ -5,6 +5,7 @@ import Timer from './timer.jsx';
 import CountdownWrapper from './countdownWrapper.jsx';
 import { isRealWord, scoreMap, mapObjToArray } from '../helpers';
 import { database } from '../firebase';
+import AdminView from './adminView.jsx';
 
 export default class GameRoom extends Component {
 
@@ -131,7 +132,7 @@ export default class GameRoom extends Component {
         
         {
           this.props.currentUser.isAdmin &&
-          <h3>Admin View</h3>
+         <AdminView currentRoom={this.state.currentRoom} />
         }
 
         <h2>Room Name: { this.props.currentUser.currentRoom }</h2>
