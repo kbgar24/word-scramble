@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-
 import LetterGenerator from './letterGenerator.jsx';
 import Timer from './timer.jsx';
-
-import Countdown from 'react-countdown-now';
+// import Countdown from 'react-countdown-now';
+import CountdownWrapper from './countdownWrapper.jsx';
+import { isRealWord, scoreMap, mapObjToArray } from '../helpers';
 
 export default class GameRoom extends Component {
 
@@ -11,45 +11,118 @@ export default class GameRoom extends Component {
     super(props);
     this.state = {
       hasStarted: false,
+      lastWordScore: 0,
+      totalScore: 0,
     }
   }
 
   static getDerivedStateFromProps = (nextProps, prevState) => {
     const { currentRoom } = nextProps.currentUser;
-    const { hasStarted  } = nextProps.state.data.rooms.find(({ name }) => name === currentRoom)
-    return { ...prevState, hasStarted }
+    const { hasStarted, startTime  } = nextProps.state.data.rooms.find(({ name }) => name === currentRoom)
+    let { scoreBoard, hasStarted: prevHasStarted } = prevState;
+    hasStarted && (scoreBoard = false);
+    // return hasStarted === prevHasStarted === true
+    // ? null
+    // : { ...prevState, currentRoom, hasStarted, scoreBoard }
+    return startTime 
+    ? { ...prevState, currentRoom, hasStarted, scoreBoard, startTime }
+      : { ...prevState, currentRoom, hasStarted, scoreBoard }
+
   }
 
   handleNewLetters = (currentLetters) => {
-    firebase
-      .database()
+    this.setState({startTime: Date.now()})
+    firebase.database()
       .ref(`rooms/${this.props.currentUser.currentRoom}`)
-      .update({ currentLetters, hasStarted: true })
-    
+      .update({ currentLetters, hasStarted: true, startTime: Date.now() })
+      
     setTimeout(() => {
-      firebase
-        .database()
+      firebase.database()
         .ref(`rooms/${this.props.currentUser.currentRoom}`)
         .update({ hasStarted: false })
-    }, 20000)
+    }, 20100)
+    this.handleGameOver();
   }
   
   handleValidWord = (word) => {
+    const totalScore = this.scoreWord(word);
     firebase
       .database()
       .ref(`rooms/${this.props.currentUser.currentRoom}/alreadyPlayed`)
       .push(word)
+
+    // firebase 
+    //   .database()
+    //   .ref(`users/${this.props.currentUser.id}`)
+    //   .update({ totalScore })
   }
 
+  handleGameOver = () => {
+    const { totalScore } = this.state;
+    setTimeout(() => {
+      this.getUserScores()
+    }, 20100)
+  }
+
+  getUserScores = () => {
+    // console.log('getUserScore called!');
+    // const { currentRoom } = this.state;
+    firebase.database()
+      .ref('/rooms')
+      .once('value')
+      .then(snapshot => {
+        const roomObj = snapshot.val();
+        const rooms = mapObjToArray(roomObj);
+
+        const scoreBoard = rooms.filter(({ currentRoom }) => currentRoom === this.state.currentRoom)
+        console.log('rawScoreboard: ', scoreBoard);
+        this.setState({ scoreBoard })
+      })
+    // const scoreBoard = this.props.state.data.users
+      // .filter(({currentRoom}) => currentRoom === this.state.currentRoom)
+      // .map(({ name, totalScore }) => { name, totalScore })
+      // .sort((a,b) => (
+      //   a.totalScore < b.totalScore
+      //   ? -1
+      //   : 1
+      // ))
+    // console.log('rawScoreboard: ', scoreBoard);
+    // this.setState({ scoreBoard });
+  }
+
+  scoreWord = word => {
+    const { totalScore: oldScore } = this.state;
+    let lastWordScore = 0;
+    const length = word.length;
+    const isReal = isRealWord(word)
+    if (!isReal) {
+      lastWordScore = 2;
+    } else {
+      lastWordScore = scoreMap[length];
+    }
+
+    const totalScore = oldScore + lastWordScore;
+
+    this.setState({ totalScore, lastWordScore })
+
+    return totalScore;
+
+
+  }
+
+  // callOnce = (fn) => {
+  //   counter = this.state.counter;
+  //   return 
+  // }
 
   render = () => {
     console.log('propsgameroom: ', this.props)
-    console.log('stateGameroom: ', this.state)
-    
+    // console.log('stateGameroom: ', this.state)
+    const { totalScore, lastWordScore, scoreBoard } = this.state;
     const currentRoom = this.props.currentUser.currentRoom;
     const currentRoomObj = this.props.state.data.rooms.find(({ name }) => name === currentRoom)
     const { currentLetters } = currentRoomObj;
-    console.log('currenRoomObj: ', currentRoomObj);
+    console.log('scoreBoard!!: ', scoreBoard)
     return (
       <div>
         <h1>GameRoom!</h1>
@@ -60,7 +133,23 @@ export default class GameRoom extends Component {
         }
 
         <h2>Room Name: { this.props.currentUser.currentRoom }</h2>
-        
+        {
+          this.state.scoreBoard &&
+          <div>
+            <h2>ScoreBoard</h2>
+            { console.log('scoreboard!!!!: ', this.state.scoreboard) }
+            <ol>
+              { 
+                this.state.scoreBoard.map(({name, totalScore}) => (
+                  <li>
+                    { `${name} - ${totalScore}points `}
+                  </li>
+                )) 
+              }
+            </ol>
+          </div>
+
+        }
         <h2>Users in Room</h2>
         <ul>
             { 
@@ -73,22 +162,9 @@ export default class GameRoom extends Component {
               ))
             } 
         </ul>
-        {
-          this.state.hasStarted
-            ? <Countdown
-              date={Date.now() + 20000}
-              intervalDelay={0}
-              precision={3}
-              renderer={props => <div>{(props.total / 1000).toFixed(2)}</div>}
-            // controlled={true}
-            // getTimeDifference={() => <div>{props.total}</div>}
-
-            />
-            : <div>20.00</div>
-        }
-        
-       
-      
+        <CountdownWrapper 
+          hasStarted={this.state.hasStarted}
+          startTime={this.state.startTime}/>
         {/* <Timer hasStarted={this.state.hasStarted} /> */}
         <LetterGenerator 
           admin={this.props.currentUser.isAdmin}
@@ -97,7 +173,10 @@ export default class GameRoom extends Component {
           currentLetters={currentLetters}
           handleValidWord={this.handleValidWord}
           hasStarted={this.state.hasStarted}
+          lastWordScore={this.state.lastWordScore}
         />
+        <h2>Total Score: {totalScore}</h2>
+        <h3>Last Word Score: {lastWordScore}</h3>
         <button 
           name='Lobby'
           onClick={() => {this.props.handleLeaveRoom(this.props.currentUser.isAdmin)}}

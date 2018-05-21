@@ -88,3 +88,5 @@ export const scoreMap = {
 }
 
 export const isRealWord = word => Math.floor(Math.random() * 2);
+
+export const mapObjToArray = obj => Object.keys(obj).map(key => obj[key])

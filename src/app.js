@@ -80,9 +80,11 @@ class App extends Component {
     e.preventDefault();
     // const { id } = this.props.users.currentUser;
 
-    
-    this.props.createNewRoom(this.state.newRoom, this.props.state.user.currentUser)
-    this.setState({ newRoom : '' })
+    const { newRoom } = this.state;
+    if (newRoom) {
+      this.props.createNewRoom(this.state.newRoom, this.props.state.user.currentUser)
+      this.setState({ newRoom : '' })
+    }
     //render new room
     // update current room for user in db
     // 
