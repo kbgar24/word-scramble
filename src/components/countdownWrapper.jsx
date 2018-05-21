@@ -14,19 +14,19 @@ export default class CountdownWrapper extends Component {
   }
 
   static getDerivedStateFromProps = (nextProps, prevState) => {
-    const prevHasStarted = prevState.hasStarted;
-    const hasStarted = nextProps.hasStarted;
+    // const prevHasStarted = prevState.hasStarted;
+    const { hasStarted, startTime } = nextProps;
 
-    if (!prevHasStarted && hasStarted){
-      console.log('***************');
-      console.log('***************');
-      console.log('updating timer!');
-      console.log('***************');
-      console.log('***************');
-      return { hasStarted }
-    } else {
-      return null;
-    }
+    // if (!prevHasStarted && hasStarted){
+    //   console.log('***************');
+    //   console.log('***************');
+    //   console.log('updating timer!');
+    //   console.log('***************');
+    //   console.log('***************');
+      return { hasStarted, startTime }
+    // } else {
+    //   return null;
+    // }
   }
 
   render() {
@@ -39,9 +39,9 @@ export default class CountdownWrapper extends Component {
     return (
       <div>
         { 
-          this.props.startTime
+          this.state.startTime
           ? <Countdown
-              date={this.props.startTime + 20000}
+              date={this.state.startTime + 20000}
               intervalDelay={0}
               precision={3}
               renderer={props => <div>{(props.total / 1000).toFixed(2)}</div>}

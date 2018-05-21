@@ -21,17 +21,12 @@ export default class GameRoom extends Component {
     const { hasStarted, startTime  } = nextProps.state.data.rooms.find(({ name }) => name === currentRoom)
     let { scoreBoard, hasStarted: prevHasStarted } = prevState;
     hasStarted && (scoreBoard = false);
-    // return hasStarted === prevHasStarted === true
-    // ? null
-    // : { ...prevState, currentRoom, hasStarted, scoreBoard }
-    return startTime 
-    ? { ...prevState, currentRoom, hasStarted, scoreBoard, startTime }
-      : { ...prevState, currentRoom, hasStarted, scoreBoard }
+    return  { ...prevState, currentRoom, hasStarted, scoreBoard, startTime }
 
   }
 
   handleNewLetters = (currentLetters) => {
-    this.setState({startTime: Date.now()})
+    // this.setState({startTime: Date.now()})
     firebase.database()
       .ref(`rooms/${this.props.currentUser.currentRoom}`)
       .update({ currentLetters, hasStarted: true, startTime: Date.now() })
@@ -39,7 +34,7 @@ export default class GameRoom extends Component {
     setTimeout(() => {
       firebase.database()
         .ref(`rooms/${this.props.currentUser.currentRoom}`)
-        .update({ hasStarted: false })
+        .update({ hasStarted: false, startTime: false })
     }, 20100)
     this.handleGameOver();
   }
