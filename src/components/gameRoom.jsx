@@ -13,15 +13,16 @@ export default class GameRoom extends Component {
       hasStarted: false,
       lastWordScore: 0,
       totalScore: 0,
+      showScoreboard: false,
     }
   }
 
   static getDerivedStateFromProps = (nextProps, prevState) => {
-    const { currentRoom } = nextProps.currentUser;
-    const { hasStarted, startTime  } = nextProps.state.data.rooms.find(({ name }) => name === currentRoom)
-    let { scoreBoard, hasStarted: prevHasStarted } = prevState;
-    hasStarted && (scoreBoard = false);
-    return  { ...prevState, currentRoom, hasStarted, scoreBoard, startTime }
+    const { currentRoom, lastWordScore, totalScore } = nextProps.currentUser;
+    const { hasStarted, startTime, showScoreboard, scoreBoard  } = nextProps.state.data.rooms.find(({ name }) => name === currentRoom)
+    // let { scoreBoard, hasStarted: prevHasStarted } = prevState;
+    // hasStarted && (scoreBoard = false);
+    return  { ...prevState, currentRoom, hasStarted, scoreBoard, startTime, showScoreboard, lastWordScore, totalScore }
 
   }
 
@@ -29,12 +30,20 @@ export default class GameRoom extends Component {
     // this.setState({startTime: Date.now()})
     firebase.database()
       .ref(`rooms/${this.props.currentUser.currentRoom}`)
-      .update({ currentLetters, hasStarted: true, startTime: Date.now() })
+      .update({ showScoreboard: false, currentLetters, hasStarted: true, startTime: Date.now() })
+    
+    this.props.state.data.users.forEach(({currentRoom, id}) => {
+      if (currentRoom === this.state.currentRoom){
+        firebase.database()
+          .ref(`users/${id}`)
+          .update({ totalScore: 0, lastWordScore: 0 })
+      }
+    })
       
-    setTimeout(() => {
+      setTimeout(() => {
       firebase.database()
         .ref(`rooms/${this.props.currentUser.currentRoom}`)
-        .update({ hasStarted: false, startTime: false })
+        .update({ hasStarted: false, startTime: false, showScoreboard: true })
     }, 20100)
     this.handleGameOver();
   }
@@ -46,10 +55,10 @@ export default class GameRoom extends Component {
       .ref(`rooms/${this.props.currentUser.currentRoom}/alreadyPlayed`)
       .push(word)
 
-    // firebase 
-    //   .database()
-    //   .ref(`users/${this.props.currentUser.id}`)
-    //   .update({ totalScore })
+    firebase 
+      .database()
+      .ref(`users/${this.props.currentUser.id}`)
+      .update({ totalScore })
   }
 
   handleGameOver = () => {
@@ -62,31 +71,30 @@ export default class GameRoom extends Component {
   getUserScores = () => {
     // console.log('getUserScore called!');
     // const { currentRoom } = this.state;
-    firebase.database()
-      .ref('/rooms')
-      .once('value')
-      .then(snapshot => {
-        const roomObj = snapshot.val();
-        const rooms = mapObjToArray(roomObj);
+    const scoreBoard = this.props.state.data.users
+      .filter(({ currentRoom }) => currentRoom === this.state.currentRoom)
+      .map(({ name, totalScore }) => ({ name, totalScore }))
+      .sort((a,b) => (
+        a.totalScore < b.totalScore
+        ? 1
+        : -1
+      ))
 
-        const scoreBoard = rooms.filter(({ currentRoom }) => currentRoom === this.state.currentRoom)
-        console.log('rawScoreboard: ', scoreBoard);
-        this.setState({ scoreBoard })
-      })
+    firebase
+      .database()
+      .ref(`rooms/${this.props.currentUser.currentRoom}`)
+      .update({ scoreBoard, currentLetters: '', alreadyPlayed: false })
+
+    console.log('rawScoreboard: ', scoreBoard);
+        // this.setState({ scoreBoard })
     // const scoreBoard = this.props.state.data.users
       // .filter(({currentRoom}) => currentRoom === this.state.currentRoom)
-      // .map(({ name, totalScore }) => { name, totalScore })
-      // .sort((a,b) => (
-      //   a.totalScore < b.totalScore
-      //   ? -1
-      //   : 1
-      // ))
     // console.log('rawScoreboard: ', scoreBoard);
     // this.setState({ scoreBoard });
   }
 
   scoreWord = word => {
-    const { totalScore: oldScore } = this.state;
+    const { totalScore: oldScore = 0 } = this.state;
     let lastWordScore = 0;
     const length = word.length;
     const isReal = isRealWord(word)
@@ -117,7 +125,6 @@ export default class GameRoom extends Component {
     const currentRoom = this.props.currentUser.currentRoom;
     const currentRoomObj = this.props.state.data.rooms.find(({ name }) => name === currentRoom)
     const { currentLetters } = currentRoomObj;
-    console.log('scoreBoard!!: ', scoreBoard)
     return (
       <div>
         <h1>GameRoom!</h1>
@@ -129,14 +136,14 @@ export default class GameRoom extends Component {
 
         <h2>Room Name: { this.props.currentUser.currentRoom }</h2>
         {
-          this.state.scoreBoard &&
+          this.state.showScoreboard && this.state.scoreBoard && 
           <div>
             <h2>ScoreBoard</h2>
             { console.log('scoreboard!!!!: ', this.state.scoreboard) }
             <ol>
               { 
-                this.state.scoreBoard.map(({name, totalScore}) => (
-                  <li>
+                this.state.scoreBoard.map(({name, totalScore}, i) => (
+                  <li key={i}>
                     { `${name} - ${totalScore}points `}
                   </li>
                 )) 
