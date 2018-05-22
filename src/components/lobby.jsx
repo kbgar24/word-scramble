@@ -97,7 +97,7 @@ export default class Lobby extends Component {
   }
 
   componentDidUpdate(){
-    this.nameInput.focus();
+    this.nameInput && this.nameInput.focus();
   }
 
   newRoomChange = ({ target: { value: newRoom } }) => {
@@ -162,6 +162,9 @@ export default class Lobby extends Component {
 
     console.log('Approps: ', this.props);
     const activeItem = 'home';
+
+    this.nameInput && this.nameInput.focus();
+    
     return (
       <div >
           { this.state.currentUser ?  (
@@ -223,8 +226,8 @@ export default class Lobby extends Component {
                       <Table.Cell>{senderName}</Table.Cell>
                       <Table.Cell>{roomName}</Table.Cell>
                       <Table.Cell>
-                        <button><a href={`http://localhost:8080/gameroom/${roomId}`}>Accept</a></button>
-                        <button onClick={this.handleInviteDecline(senderName)}>Decline</button>
+                        <Button positive><a href={`http://localhost:8080/gameroom/${roomId}`}>Accept</a></Button>
+                        <Button negative onClick={this.handleInviteDecline(senderName)}>Decline</Button>
                       </Table.Cell>
                     </Table.Row>
                   ))}
@@ -279,7 +282,7 @@ export default class Lobby extends Component {
                           <Table.Cell>{name}</Table.Cell>
                           <Table.Cell>Kendrick</Table.Cell>
                           <Table.Cell >5</Table.Cell>
-                          <Table.Cell ><button>Join</button></Table.Cell>
+                          <Table.Cell ><Button positive>Join</Button></Table.Cell>
                         </Table.Row>
                     ))}
                   </Table.Body>

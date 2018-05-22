@@ -57,3 +57,11 @@ table.table {
     border: none;
     padding: 10px;
 }
+
+button>a {
+  color: white;
+}
+
+button>a:hover {
+  color: white;
+}
