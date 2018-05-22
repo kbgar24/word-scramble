@@ -47,3 +47,13 @@ table.table {
 .games-in-progress table button {
   margin: 0px auto
 }
+
+.newRoomInput {
+      width: 580px;
+    font-size: 50px;
+    display: block;
+    margin: 40px auto;
+    text-align: center;
+    border: none;
+    padding: 10px;
+}

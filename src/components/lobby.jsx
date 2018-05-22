@@ -34,9 +34,12 @@ export default class Lobby extends Component {
       currentUser: {},
       invites: [],
     }
+
+    // this.roomNameInput = React.createRef();
   }
 
   componentDidMount() {
+    // this.roomNameInput.focus();
     // console.log('this.props: ', this.props);
     // this.props.fetchData();
   }
@@ -91,6 +94,10 @@ export default class Lobby extends Component {
       currentUser,
       invites,
     });
+  }
+
+  componentDidUpdate(){
+    this.nameInput.focus();
   }
 
   newRoomChange = ({ target: { value: newRoom } }) => {
@@ -183,10 +190,18 @@ export default class Lobby extends Component {
           {/* { <LetterGenerator />} */}
 
             <div>
-              <input
-                type='button'
-                value='Create Game'
-                className='create-btn' />
+              <form onSubmit={this.handleCreateNewRoom}>
+                <input 
+                  ref={(input) => { this.nameInput = input; }}
+                  className='newRoomInput'
+                  placeholder='Enter Room Name' type='text' value={this.state.newRoom} onChange={this.newRoomChange} />
+                <input
+
+                  type='button'
+                  value='Create New Game'
+                  className='create-btn' />
+              </form>
+
             </div>
             <div className='invites-list'>
           <h1>Current Game Invites</h1>
@@ -274,9 +289,7 @@ export default class Lobby extends Component {
             </div>
           }
    
-          <form onSubmit={this.handleCreateNewRoom}>
-            <input type='text' value={this.state.newRoom} onChange={this.newRoomChange} />
-          </form>
+         
           {/* {this.state.currentUser
             && this.state.currentUser.currentRoom
             && this.state.currentUser.currentRoom !== 'Lobby'
