@@ -1,0 +1,29 @@
+.create-btn {
+  background: #34d93f;
+  background-image: -webkit-linear-gradient(top, #34d93f, #b3b82c);
+  background-image: -moz-linear-gradient(top, #34d93f, #b3b82c);
+  background-image: -ms-linear-gradient(top, #34d93f, #b3b82c);
+  background-image: -o-linear-gradient(top, #34d93f, #b3b82c);
+  background-image: linear-gradient(to bottom, #34d93f, #b3b82c);
+  -webkit-border-radius: 15;
+  -moz-border-radius: 15;
+  border-radius: 15px;
+  font-family: Arial;
+  color: #ffffff;
+  font-size: 40px;
+  padding: 10px 20px 10px 20px;
+  text-decoration: none;
+  cursor: pointer;
+  margin: 0px auto;
+  display: block;
+}
+
+.create-btn:hover {
+  background: #8bc257;
+  background-image: -webkit-linear-gradient(top, #8bc257, #4ba63d);
+  background-image: -moz-linear-gradient(top, #8bc257, #4ba63d);
+  background-image: -ms-linear-gradient(top, #8bc257, #4ba63d);
+  background-image: -o-linear-gradient(top, #8bc257, #4ba63d);
+  background-image: linear-gradient(to bottom, #8bc257, #4ba63d);
+  text-decoration: none;
+}

@@ -1,0 +1,54 @@
+footer {
+  bottom: 0px;
+  position: absolute;
+  width: 100%;
+  bottom: 0px;
+  left: 0px;
+}
+
+footer>div {   
+  background-color: #1b1c1d;
+  margin: 0px auto;
+  text-align: center;
+  color: white;
+  padding: 10px;
+  position: relative;
+}
+
+
+footer>div h1 {
+  margin: 10px
+}
+
+footer>div div {
+  width: 50%;
+  height: 2px;
+  background-color: white;
+  margin: 0px auto;
+}
+
+footer>div p {
+  margin: 10px;
+  font-size: 25px;
+}
+
+
+/*******
+*
+* 
+*
+********/
+.games-in-progress {
+  text-align: center;
+  width: 70%;
+  max-width: 800px;
+  margin: 0px auto;
+} 
+
+.games-in-progress table.table {
+  text-align: center
+}
+
+.games-in-progress table button {
+  margin: 0px auto
+}

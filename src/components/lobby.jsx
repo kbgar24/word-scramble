@@ -12,7 +12,7 @@ import { createNewRoom } from '../actions/roomActions';
 import { joinUserRoom } from '../actions/userActions';
 import uuid from 'uuid';
 import { mapObjToArray } from '../helpers';
-
+import { Table, Segment, Menu } from 'semantic-ui-react';
 
 const config = {
   apiKey: "AIzaSyAKUjZ8dATJT0QNZqKWhVqTG9-bLT1JXa4",
@@ -154,8 +154,15 @@ export default class Lobby extends Component {
     console.log('Apstate: ', this.state);
 
     console.log('Approps: ', this.props);
+    const activeItem = 'home';
     return (
-      <div>
+      <div >
+        <Menu inverted>
+          {/* <Menu.Item name='home' active={activeItem === 'home'} onClick={this.handleItemClick} />
+          <Menu.Item name='messages' active={activeItem === 'messages'} onClick={this.handleItemClick} />
+          <Menu.Item name='friends' active={activeItem === 'friends'} onClick={this.handleItemClick} /> */}
+        </Menu>
+        <h1 className='pageTitle'>WordScramble</h1>
       { this.state.currentUser && this.state.currentUser.currentRoom === 'Lobby' && (
         <div>
           <h1>LOBBY</h1>
@@ -163,6 +170,13 @@ export default class Lobby extends Component {
             this.state.currentUser && <h2>Current User Id: {this.state.currentUser.name}</h2>
           }
           {/* { <LetterGenerator />} */}
+
+            <div>
+              <input
+                type='button'
+                value='Create Game'
+                className='create-btn' />
+            </div>
           <h2>Invites</h2>
           <ul>
             { this.state.invites.map(({senderName, roomName, roomId  }) => (
@@ -182,7 +196,37 @@ export default class Lobby extends Component {
               this.props.state.data.users.map(({ name, id, currentRoom }) => <li key={id}>{`${name} - ${currentRoom}`}</li>)
             }
           </ul>
-          <h2>Current Rooms</h2>
+
+
+            <div className='games-in-progress'>
+          <h2>Games in Progress</h2>
+      <Table celled inverted selectable>
+                  <Table.Header>
+                    <Table.Row>
+                      <Table.HeaderCell>Room Name</Table.HeaderCell>
+                      <Table.HeaderCell>Admin</Table.HeaderCell>
+                      <Table.HeaderCell>Number of Players</Table.HeaderCell>
+                      <Table.HeaderCell>Join</Table.HeaderCell>
+                      
+                    </Table.Row>
+                  </Table.Header>
+
+                  <Table.Body>
+                    { this.props.state.data.rooms
+                      .filter(({name}) => name !== 'Lobby' && name !== this.props.state.user.currentUser.currentRoom)
+                      .map(({name}) => (
+                        <Table.Row>
+                          <Table.Cell>{name}</Table.Cell>
+                          <Table.Cell>Kendrick</Table.Cell>
+                          <Table.Cell >5</Table.Cell>
+                          <Table.Cell ><button>Join</button></Table.Cell>
+                        </Table.Row>
+                    ))}
+                  </Table.Body>
+                </Table>
+
+
+            </div>
           <ul>
             {
               this.props.state.data.rooms
@@ -200,9 +244,9 @@ export default class Lobby extends Component {
             }
           </ul>
           }
+   
           <form onSubmit={this.handleCreateNewRoom}>
             <input type='text' value={this.state.newRoom} onChange={this.newRoomChange} />
-            <input type='submit' value='Create New Room' />
           </form>
           {/* {this.state.currentUser
             && this.state.currentUser.currentRoom
@@ -217,6 +261,14 @@ export default class Lobby extends Component {
         <GameRoom currentUser={this.state.currentUser} handleLeaveRoom={this.handleLeaveRoom}/>
         ) 
       }
+
+      <footer>
+        <div>
+          <h1>Kendrick Gardner</h1>
+          <div></div>
+          <p>Application Author</p>
+        </div>
+      </footer>
     </div>
     )
   }

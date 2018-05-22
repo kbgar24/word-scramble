@@ -34,7 +34,6 @@ class AdminView extends Component {
 
   handleSendInvite = recipientId => e => {
     const roomId = this.props.state.data.rooms.find(({ name }) => name === this.props.currentRoom).id
-    console.log('this.props:  ', this.props);
     database
       .ref(`users/${recipientId}/invites`)
       .push({ 
