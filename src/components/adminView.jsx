@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { database } from '../firebase.js';
 
 const inputStyle = {
   width: '450px',
@@ -32,7 +33,15 @@ class AdminView extends Component {
   }
 
   handleSendInvite = recipientId => e => {
-    alert(`Send invite from ${this.props.state.user.currentUser} to ${recipientId} to join ${this.props.currentRoom}`)
+    const roomId = this.props.state.data.rooms.find(({ name }) => name === this.props.currentRoom).id
+    console.log('this.props:  ', this.props);
+    database
+      .ref(`users/${recipientId}/invites`)
+      .push({ 
+        roomId , 
+        senderName: this.props.state.data.users.find(({ id }) => id === this.props.state.user.currentUser).name,
+        roomName: this.props.currentRoom,
+      })
   }
 
 

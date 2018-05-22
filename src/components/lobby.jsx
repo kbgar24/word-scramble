@@ -11,6 +11,7 @@ import { fetchAllData } from '../actions/fetchActions';
 import { createNewRoom } from '../actions/roomActions';
 import { joinUserRoom } from '../actions/userActions';
 import uuid from 'uuid';
+import { mapObjToArray } from '../helpers';
 
 
 const config = {
@@ -31,6 +32,7 @@ export default class Lobby extends Component {
     this.state = {
       newRoom: '',
       currentUser: {},
+      invites: [],
     }
   }
 
@@ -74,12 +76,20 @@ export default class Lobby extends Component {
     //   })
     //   })
     // : [];
-
+    let invites;
+    if (currentUser){
+      invites = currentUser.invites
+        ? mapObjToArray(currentUser.invites)
+        : []
+    } else {
+      invites = []
+    }
     // console.log('this: ', this);
     console.log('CURRENTUSER!!: ', currentUser);
     return ({
       ...prevState,
       currentUser,
+      invites,
     });
   }
 
@@ -134,6 +144,12 @@ export default class Lobby extends Component {
     this.props.joinUserRoom(name);
   }
 
+  handleInviteDecline = (senderName) => () => {
+    const{ invites, id } = this.state.currentUser;
+    const toDelete = Object.keys(invites).find(key => invites[key].senderName === senderName);
+    firebase.database().ref(`users/${id}/invites/${toDelete}`).remove();
+  }
+
   render() {
     console.log('Apstate: ', this.state);
 
@@ -147,6 +163,18 @@ export default class Lobby extends Component {
             this.state.currentUser && <h2>Current User Id: {this.state.currentUser.name}</h2>
           }
           {/* { <LetterGenerator />} */}
+          <h2>Invites</h2>
+          <ul>
+            { this.state.invites.map(({senderName, roomName, roomId  }) => (
+            <li key={roomId}>
+              {`${senderName} has invited you to join a game in ${roomName}`}
+                  <button><a href={`http://localhost:8080/gameroom/${roomId}`}>Accept</a></button>
+                  <button onClick={this.handleInviteDecline(senderName)}>Decline</button>
+            </li>
+            ))}
+            
+          </ul>
+
 
           <h2>Logged in Users</h2>
           <ul>
