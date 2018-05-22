@@ -10,11 +10,11 @@
   border-radius: 15px;
   font-family: Arial;
   color: #ffffff;
-  font-size: 40px;
+  font-size: 70px;
   padding: 10px 20px 10px 20px;
   text-decoration: none;
   cursor: pointer;
-  margin: 0px auto;
+  margin: 50px auto;
   display: block;
 }
 
@@ -26,4 +26,24 @@
   background-image: -o-linear-gradient(top, #8bc257, #4ba63d);
   background-image: linear-gradient(to bottom, #8bc257, #4ba63d);
   text-decoration: none;
+}
+
+
+.logged-in-users-list, .invites-list, .games-in-progress {
+  text-align: center;
+  width: 70%;
+  max-width: 900px;
+  margin: 50px auto;
+} 
+
+table.table {
+  text-align: center !important;
+}
+
+.games-in-progress table.table {
+  text-align: center
+}
+
+.games-in-progress table button {
+  margin: 0px auto
 }

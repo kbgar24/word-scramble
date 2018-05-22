@@ -1,6 +1,12 @@
 .pageTitle {
   font-size: 50px;
-  text-align: center;
-  text-decoration: underline;
   font-family: 'Helvetica neue', Helvetica, sans-serif;
+  position: absolute;
+  top: 0px;
+  color: white;
+  z-index: 5;
+  font-size: 40px;
+  margin: 0px;
+  left: calc(50% - 140px);
+  margin-top: 4px;
 }

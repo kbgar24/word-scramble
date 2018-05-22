@@ -158,11 +158,11 @@ export default class Lobby extends Component {
     return (
       <div >
           { this.state.currentUser ?  (
-            <Menu inverted>
-              <Menu.Item name='messages'  >
+            <Menu inverted id='topMenu' >
+              <Menu.Item  >
                 {this.state.currentUser.currentRoom}
               </Menu.Item>
-              <Menu.Item name='messages' >
+              <Menu.Item position='right'>
                 {this.state.currentUser.name}
               </Menu.Item>
             </Menu>
@@ -272,22 +272,6 @@ export default class Lobby extends Component {
 
 
             </div>
-          <ul>
-            {
-              this.props.state.data.rooms
-                .filter(({ name }) => name !== 'Lobby' && name !== this.props.state.user.currentUser.currentRoom)
-                .map(({ name }) => (
-                  <li key={name}>
-                    {`${name}`}
-                    {
-                      this.props.state.user.currentUser.currentRoom !== name
-                        ? <button name={name} onClick={this.handleJoinRoom}>Join</button>
-                        : <button name='Lobby' onClick={this.handleJoinRoom}>Leave</button>
-                    }
-                  </li>)
-                )
-            }
-          </ul>
           }
    
           <form onSubmit={this.handleCreateNewRoom}>

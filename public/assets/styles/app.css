@@ -41,26 +41,6 @@ footer>div p {
 }
 
 
-/*******
-*
-* 
-*
-********/
-.logged-in-users-list, .invites-list, .games-in-progress {
-  text-align: center;
-  width: 70%;
-  max-width: 900px;
-  margin: 0px auto;
-} 
-
-table.table {
-  text-align: center !important;
-}
-
-.games-in-progress table.table {
-  text-align: center
-}
-
-.games-in-progress table button {
-  margin: 0px auto
+#topMenu {
+  font-size: 1.5rem;
 }
