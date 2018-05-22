@@ -12,7 +12,7 @@ import { createNewRoom } from '../actions/roomActions';
 import { joinUserRoom } from '../actions/userActions';
 import uuid from 'uuid';
 import { mapObjToArray } from '../helpers';
-import { Table, Segment, Menu } from 'semantic-ui-react';
+import { Table, Segment, Menu, Icon, Sidebar, Button, Image, Header } from 'semantic-ui-react';
 
 const config = {
   apiKey: "AIzaSyAKUjZ8dATJT0QNZqKWhVqTG9-bLT1JXa4",
@@ -157,18 +157,29 @@ export default class Lobby extends Component {
     const activeItem = 'home';
     return (
       <div >
-        <Menu inverted>
-          {/* <Menu.Item name='home' active={activeItem === 'home'} onClick={this.handleItemClick} />
-          <Menu.Item name='messages' active={activeItem === 'messages'} onClick={this.handleItemClick} />
-          <Menu.Item name='friends' active={activeItem === 'friends'} onClick={this.handleItemClick} /> */}
-        </Menu>
+          { this.state.currentUser ?  (
+            <Menu inverted>
+              <Menu.Item name='messages'  >
+                {this.state.currentUser.currentRoom}
+              </Menu.Item>
+              <Menu.Item name='messages' >
+                {this.state.currentUser.name}
+              </Menu.Item>
+            </Menu>
+            )
+            : <Menu inverted></Menu>
+         }
+
+
+
         <h1 className='pageTitle'>WordScramble</h1>
+        {/* <div className='app-sidebar'> */}
+
+        {/* </div> */}
+     
       { this.state.currentUser && this.state.currentUser.currentRoom === 'Lobby' && (
         <div>
-          <h1>LOBBY</h1>
-          {
-            this.state.currentUser && <h2>Current User Id: {this.state.currentUser.name}</h2>
-          }
+       
           {/* { <LetterGenerator />} */}
 
             <div>
@@ -177,29 +188,63 @@ export default class Lobby extends Component {
                 value='Create Game'
                 className='create-btn' />
             </div>
-          <h2>Invites</h2>
-          <ul>
-            { this.state.invites.map(({senderName, roomName, roomId  }) => (
-            <li key={roomId}>
-              {`${senderName} has invited you to join a game in ${roomName}`}
-                  <button><a href={`http://localhost:8080/gameroom/${roomId}`}>Accept</a></button>
-                  <button onClick={this.handleInviteDecline(senderName)}>Decline</button>
-            </li>
-            ))}
+            <div className='invites-list'>
+          <h1>Current Game Invites</h1>
+
+              <Table celled inverted selectable>
+                <Table.Header>
+                  <Table.Row>
+                    <Table.HeaderCell>Sender</Table.HeaderCell>
+                    <Table.HeaderCell>Room Name</Table.HeaderCell>
+                    <Table.HeaderCell>Join</Table.HeaderCell>
+                    
+                    
+                  </Table.Row>
+                </Table.Header>
+
+                <Table.Body>
+                  {this.state.invites.map(({ senderName, roomName, roomId }) => (
+                    <Table.Row key={roomId}>
+                      <Table.Cell>{senderName}</Table.Cell>
+                      <Table.Cell>{roomName}</Table.Cell>
+                      <Table.Cell>
+                        <button><a href={`http://localhost:8080/gameroom/${roomId}`}>Accept</a></button>
+                        <button onClick={this.handleInviteDecline(senderName)}>Decline</button>
+                      </Table.Cell>
+                    </Table.Row>
+                  ))}
+                </Table.Body>
+              </Table>
+       
             
-          </ul>
+            </div>
 
+            <div className='logged-in-users-list'>
 
-          <h2>Logged in Users</h2>
-          <ul>
-            {
-              this.props.state.data.users.map(({ name, id, currentRoom }) => <li key={id}>{`${name} - ${currentRoom}`}</li>)
-            }
-          </ul>
+                  <h1>Online Users </h1>
+              <Table celled inverted selectable>
+                <Table.Header>
+                  <Table.Row>
+                    <Table.HeaderCell>Player Name</Table.HeaderCell>
+                    <Table.HeaderCell>Current Room</Table.HeaderCell>
+                  </Table.Row>
+                </Table.Header>
+
+                <Table.Body>
+                  {this.props.state.data.users.map(({ name, id, currentRoom }) => (
+                      <Table.Row key={id}>
+                        <Table.Cell>{name}</Table.Cell>
+                        <Table.Cell>{currentRoom}</Table.Cell>
+                      </Table.Row>
+                    ))}
+                </Table.Body>
+              </Table>
+
+            </div>
 
 
             <div className='games-in-progress'>
-          <h2>Games in Progress</h2>
+          <h1>Games in Progress</h1>
       <Table celled inverted selectable>
                   <Table.Header>
                     <Table.Row>

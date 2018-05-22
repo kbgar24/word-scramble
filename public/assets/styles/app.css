@@ -1,5 +1,13 @@
+body {
+  font-family: 'Helvetica neue', Helvetica, sans-serif;
+  font-size: 1.5rem;
+}
+
+  {
+
+}
+
 footer {
-  bottom: 0px;
   position: absolute;
   width: 100%;
   bottom: 0px;
@@ -38,12 +46,16 @@ footer>div p {
 * 
 *
 ********/
-.games-in-progress {
+.logged-in-users-list, .invites-list, .games-in-progress {
   text-align: center;
   width: 70%;
-  max-width: 800px;
+  max-width: 900px;
   margin: 0px auto;
 } 
+
+table.table {
+  text-align: center !important;
+}
 
 .games-in-progress table.table {
   text-align: center
