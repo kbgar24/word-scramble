@@ -226,8 +226,10 @@ export default class Lobby extends Component {
                       <Table.Cell>{senderName}</Table.Cell>
                       <Table.Cell>{roomName}</Table.Cell>
                       <Table.Cell>
-                        <Button positive><a href={`http://localhost:8080/gameroom/${roomId}`}>Accept</a></Button>
-                        <Button negative onClick={this.handleInviteDecline(senderName)}>Decline</Button>
+                        <div className='invite-btn-div'>
+                          <Button size='huge' positive><a href={`http://localhost:8080/gameroom/${roomId}`}>Accept</a></Button>
+                          <Button size='huge' negative onClick={this.handleInviteDecline(senderName)}>Decline</Button>
+                        </div>
                       </Table.Cell>
                     </Table.Row>
                   ))}
@@ -282,7 +284,7 @@ export default class Lobby extends Component {
                           <Table.Cell>{name}</Table.Cell>
                           <Table.Cell>Kendrick</Table.Cell>
                           <Table.Cell >5</Table.Cell>
-                          <Table.Cell ><Button positive onClick={this.handleJoinRoom(name)}>Join</Button></Table.Cell>
+                          <Table.Cell ><Button size='huge' positive onClick={this.handleJoinRoom(name)}>Join</Button></Table.Cell>
                         </Table.Row>
                     ))}
                   </Table.Body>

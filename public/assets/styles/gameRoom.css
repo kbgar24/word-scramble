@@ -28,11 +28,13 @@
 
 .in-game-score {
   width: 400px;
+  margin: 0px auto;
 }
 
 .countdown-timer {
   font-size: 180px;
   text-align: center;
+  margin-top: 60px;
 }
 
 .current-letters-div {
@@ -44,6 +46,11 @@ text-align: center;
     margin: 0px auto;
 }
 
+.invite-btn-div {
+  display: flex;
+  justify-content: space-around;
+}
+
 .letter-generator > h1 {
   text-align: center;
   margin-top: 200px;
@@ -53,7 +60,12 @@ text-align: center;
   text-align: center;
 }
 
-.scoreboard-div table {
-  width: 800px;
-    margin: 0px auto;
+div.scoreboard-div table {
+  width: 800px !important;
+  margin: 0px auto !important;
+}
+
+div.gameRoom > button {
+  position: absolute;
+  right: 0px;
 }

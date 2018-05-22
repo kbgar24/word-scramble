@@ -130,7 +130,16 @@ export default class GameRoom extends Component {
     const currentRoomObj = this.props.state.data.rooms.find(({ name }) => name === currentRoom)
     const { currentLetters } = currentRoomObj;
     return (
-      <div>
+      <div className='gameRoom'>
+        <Button
+          negative
+          size='massive'
+          name='Lobby'
+          onClick={() => { this.props.handleLeaveRoom(this.props.currentUser.isAdmin) }}
+        >
+         { this.props.currentUser.isAdmin ? 'Close Room' : 'Leave Room' }
+        </Button>
+
         {
           this.props.currentUser.isAdmin &&
          <AdminView currentRoom={this.state.currentRoom} />
@@ -138,7 +147,7 @@ export default class GameRoom extends Component {
         {
           this.state.showScoreboard && this.state.scoreBoard && (
           <div className='scoreboard-div'>
-            <h1>ScoreBoard</h1>
+            {/* <h1>ScoreBoard</h1> */}
 
             <Table celled inverted selectable>
               <Table.Header>
@@ -164,15 +173,15 @@ export default class GameRoom extends Component {
       
         }
 
-        <div className='current-players-list'>
+        {/* <div className='current-players-list'> */}
 
           {/* <h1> Players in Room </h1> */}
-          <Table celled inverted selectable>
+          {/* <Table celled inverted selectable>
             <Table.Header>
               <Table.Row>
                 <Table.HeaderCell>Current Players</Table.HeaderCell>
                 {/* <Table.HeaderCell>Current Room</Table.HeaderCell> */}
-              </Table.Row>
+              {/* </Table.Row>
             </Table.Header>
 
             <Table.Body>
@@ -183,10 +192,11 @@ export default class GameRoom extends Component {
                   <Table.Cell>{name}</Table.Cell>
                 </Table.Row>
               ))}
-            </Table.Body>
-          </Table>
+            </Table.Body> */}
+          {/* </Table> */} */}
 
-        </div>
+        {/* </div> */}
+        
         {/* <h2>Users in Room</h2>
         <ul>
             { 
@@ -220,23 +230,15 @@ export default class GameRoom extends Component {
                 <Table.Cell>Last Word Score</Table.Cell>
                 <Table.Cell>{ lastWordScore }</Table.Cell>
               </Table.Row>
-              <Table.Row>
+              {/* <Table.Row>
                 <Table.Cell>Total Score</Table.Cell>
                 <Table.Cell>{ totalScore }</Table.Cell>
-              </Table.Row>
+              </Table.Row> */}
             </Table.Body>
           </Table>
         </div>
 
-        <Button 
-          negative
-          size='massive'
-          name='Lobby'
-          onClick={() => {this.props.handleLeaveRoom(this.props.currentUser.isAdmin)}}
-        >
-            Leave Room
-        </Button>
-        
+  
       </div>
     )
   };
