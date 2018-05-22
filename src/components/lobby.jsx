@@ -142,7 +142,7 @@ export default class Lobby extends Component {
   }
 
 
-  handleJoinRoom = ({ target: { name } }) => {
+  handleJoinRoom = name => () => {
     console.log('handleJoinRoom called: ')
     const id = this.props.state.user.currentUser;
     firebase.database().ref(`users/${id}`).update({
@@ -170,7 +170,7 @@ export default class Lobby extends Component {
           { this.state.currentUser ?  (
             <Menu inverted id='topMenu' >
               <Menu.Item  >
-                {this.state.currentUser.currentRoom}
+              <span>Current Room |</span><span style={{ width: '10px' }}></span><strong> {`  ${this.state.currentUser.currentRoom}`}</strong>
               </Menu.Item>
               <Menu.Item position='right'>
                 {this.state.currentUser.name}
@@ -282,7 +282,7 @@ export default class Lobby extends Component {
                           <Table.Cell>{name}</Table.Cell>
                           <Table.Cell>Kendrick</Table.Cell>
                           <Table.Cell >5</Table.Cell>
-                          <Table.Cell ><Button positive>Join</Button></Table.Cell>
+                          <Table.Cell ><Button positive onClick={this.handleJoinRoom(name)}>Join</Button></Table.Cell>
                         </Table.Row>
                     ))}
                   </Table.Body>

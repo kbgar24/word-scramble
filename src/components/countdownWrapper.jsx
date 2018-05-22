@@ -30,14 +30,8 @@ export default class CountdownWrapper extends Component {
   }
 
   render() {
-    console.log('***************');
-    console.log('***************');
-    console.log('rendering timer!');
-    console.log('renderCount: ', ++renderCount);
-    console.log('***************');
-    console.log('***************');
     return (
-      <div>
+      <div className='countdown-timer'>
         { 
           this.state.startTime
           ? <Countdown

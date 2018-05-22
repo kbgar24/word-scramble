@@ -18,6 +18,9 @@ module.exports = {
       exclude: /node_modules/
     }]
   },
+  node: {
+    fs: 'empty'
+  },
   devtool: 'cheap-module-eval-source-map',
   devServer: {
     contentBase: path.join(__dirname, 'public'),

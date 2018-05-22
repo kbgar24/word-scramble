@@ -13,6 +13,7 @@ import {
 let renderCount = 0;
 
 import WordBuilder from './wordBuilder.jsx';
+import { Table, Segment, Menu, Icon, Sidebar, Button, Image, Header } from 'semantic-ui-react';
 
 
 
@@ -87,17 +88,19 @@ export default class LetterGenerator extends React.Component {
     wordStatus && setTimeout(() => { this.setState({ wordStatus: '' }) }, 2500);
 
     return (
-      <div>
-        <h1>Word Scramble</h1>
+      <div className='letter-generator'>
         { 
           this.props.admin && !this.props.hasStarted &&
-          <button onClick={this.handleGenerate}>Begin New Game!</button>
+          <Button primary onClick={this.handleGenerate}>Begin New Game!</Button>
         
         }
-        <button onClick={this.scrambleLetterList}>Scramble Letters</button>
-        <button onClick={this.seperateLettersByType}>Seperate Letters By Type</button>
-        
-        <p>{currentLetters }</p>
+        {/* <div className='letterBtns'>
+          <Button size='large' onClick={this.scrambleLetterList}>Scramble Letters</Button>
+          <Button size='large' onClick={this.seperateLettersByType}>Seperate Letters By Type</Button>
+        </div>
+         */}
+         <h1>Current Letters</h1>
+        <p className='current-letters-div'>{'asdukleox' }</p>
 
         <ul>{ alreadyPlayedWords.map((word, i) => <li key={i}>{word}</li>) }</ul>
  

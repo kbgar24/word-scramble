@@ -1,0 +1,59 @@
+.current-players-list{
+  margin: 0px;
+  width: 350px;
+}
+
+.letterBtns {
+  width: 400px;
+  margin: 0px auto
+}
+
+.letterBtns button {
+  font-size: 2 rem;
+}
+
+.wordInput {
+  font-size: 80px;
+    display: block;
+    margin: 100px auto auto auto;
+    border: none;
+    border-bottom: 2px solid black;
+}
+
+.wordInput + input {
+  display: block;
+  margin: 20px auto;
+  font-size: 5rem;
+}
+
+.in-game-score {
+  width: 400px;
+}
+
+.countdown-timer {
+  font-size: 180px;
+  text-align: center;
+}
+
+.current-letters-div {
+text-align: center;
+    margin: 0px;
+    font-size: 100px;
+    width: 1000px;
+    background-color: lightblue;
+    margin: 0px auto;
+}
+
+.letter-generator > h1 {
+  text-align: center;
+  margin-top: 200px;
+}
+
+.scoreboard-div > h1 {
+  text-align: center;
+}
+
+.scoreboard-div table {
+  width: 800px;
+    margin: 0px auto;
+}

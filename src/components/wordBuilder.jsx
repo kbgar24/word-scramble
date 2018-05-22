@@ -24,8 +24,12 @@ export default class WordBuilder extends Component {
   render = () => {
     return(
     <div>
-      <form onSubmit={this.handleSubmit}>
-        <input value={this.state.value} onChange={this.handleChange}/>
+      <form id="FORM" onSubmit={this.handleSubmit}>
+        <input 
+          value={this.state.value}
+          onChange={this.handleChange}
+          className='wordInput'
+        />
         <input 
           type='submit'
           value='Check Word'
