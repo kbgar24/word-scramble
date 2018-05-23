@@ -180,3 +180,40 @@ button + .admin-sep {
 .ui.inverted.definition.table tr td:first-child, .ui.inverted.table th {
   color:  #A2B4C2 !important;
 }
+
+.three.wide.column .ui.huge.button {
+  margin: 0px auto 30px auto;
+  display: block;
+}
+
+.in-game-score tbody td {
+  height: 122px !important
+}
+
+.recent-words tbody tr {
+  height: 55px !important;
+}
+
+.recent-words {
+  width: 205px;
+  margin: 0px auto;
+}
+
+.admin-sep.panel {
+  width: 90%;
+  margin: 30px auto;
+}
+.scoreboard-div > h2 {
+  text-align: center;
+  margin: 0px;
+  color: #A2B4C2;
+}
+
+.unselectable {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}

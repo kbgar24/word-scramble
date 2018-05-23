@@ -89,9 +89,8 @@ class AdminView extends Component {
               && 'Link Copied to Clipboard!'
             }
           </div>
-          <Button color='youtube' onClick={() => { }}>Begin New Game!</Button>
-
-          <div className='admin-sep'></div>
+          <Button color='youtube' onClick={this.props.generateNewLetters}>Begin New Game!</Button>
+     
 
         </div>
     );

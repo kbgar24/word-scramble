@@ -157,6 +157,13 @@ export default class Lobby extends Component {
     firebase.database().ref(`users/${id}/invites/${toDelete}`).remove();
   }
 
+  handleInviteAccept = roomName => () => {
+    const { id } = this.state.currentUser;
+    firebase.database().ref(`users/${id}`).update({
+      currentRoom: roomName,
+    })
+  }
+
   render() {
     console.log('Apstate: ', this.state);
 
@@ -198,11 +205,8 @@ export default class Lobby extends Component {
                   ref={(input) => { this.nameInput = input; }}
                   className='newRoomInput'
                   placeholder='Enter Room Name' type='text' value={this.state.newRoom} onChange={this.newRoomChange} />
-                <input
-
-                  type='button'
-                  value='Create New Game'
-                  className='create-btn' />
+               <Button positive className='new-game-btn' >Create New Game</Button>
+        
               </form>
 
             </div>
@@ -227,7 +231,7 @@ export default class Lobby extends Component {
                       <Table.Cell>{roomName}</Table.Cell>
                       <Table.Cell>
                         <div className='invite-btn-div'>
-                          <Button size='huge' positive><a href={`http://localhost:8080/gameroom/${roomId}`}>Accept</a></Button>
+                          <Button size='huge' positive onClick={this.handleInviteAccept(roomName)}>Accept</Button>
                           <Button size='huge' negative onClick={this.handleInviteDecline(senderName)}>Decline</Button>
                         </div>
                       </Table.Cell>
@@ -292,7 +296,6 @@ export default class Lobby extends Component {
 
 
             </div>
-          }
    
          
           {/* {this.state.currentUser

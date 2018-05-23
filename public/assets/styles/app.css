@@ -6,7 +6,9 @@ body {
  #app {
   position: relative;
   padding-bottom: 250px;
-  height: 
+  background-color: #17232e;
+  color: #A2B4C2;
+}
 }
 
 footer {
@@ -46,4 +48,5 @@ footer>div p {
 
 #topMenu {
   font-size: 1.5rem;
+  border-radius: 0px;
 }
