@@ -100,7 +100,7 @@ export default class LetterGenerator extends React.Component {
         </div>
          */}
          <h1>Current Letters</h1>
-        <p className='current-letters-div'>{'asdukleox' }</p>
+        <p className='current-letters-div'>{ currentLetters }</p>
 
         <ul>{ alreadyPlayedWords.map((word, i) => <li key={i}>{word}</li>) }</ul>
  

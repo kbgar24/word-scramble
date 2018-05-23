@@ -29,6 +29,7 @@ _____ CC - Resume && Cover Letter _____
 1. Room should have admin
 2. All users should see admin
 3. Admin leaving room should close room -> Send all other users to lobby
+4. 
 
 Admin View
 - Start Button

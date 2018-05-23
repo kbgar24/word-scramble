@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { database } from '../firebase.js';
+import { Table, Segment, Menu, Icon, Sidebar, Button, Image, Header, Grid } from 'semantic-ui-react';
 
 const inputStyle = {
   width: '450px',
@@ -48,6 +49,9 @@ class AdminView extends Component {
       return (
         <div>
           <h2>Admin View</h2>
+ 
+
+          
           <button onClick={this.handleGetLink}>Generate Invitation Link</button>
           { this.state.showCopy && (
           <div>
@@ -70,6 +74,32 @@ class AdminView extends Component {
           </div>
           )}
           <h4>Outside Users</h4>
+
+          <Table celled inverted selectable>
+
+            <Table.Header>
+              <Table.Row>
+                <Table.HeaderCell>Player Name</Table.HeaderCell>
+                <Table.HeaderCell>Send Invite</Table.HeaderCell>
+              </Table.Row>
+            </Table.Header>
+
+            <Table.Body>
+              {
+                this.state.outsiders.map(({ name, id }) => (
+                  <Table.Row>
+                  <Table.Cell>{name}</Table.Cell>
+                    <Table.Cell>
+                      <Button positive onClick={this.handleSendInvite(id)}>
+                        Send Invite
+                      </Button>
+                    </Table.Cell>
+                  </Table.Row>
+                ))
+              }
+            </Table.Body>
+          </Table>
+
           <ul>
             { this.state.outsiders.map(({name, currentRoom, id}) => (
               <li key={id}> {name} - {currentRoom} <button onClick={this.handleSendInvite(id)}>Send Invite</button></li>
