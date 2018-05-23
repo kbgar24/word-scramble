@@ -99,7 +99,11 @@ export default class LetterGenerator extends React.Component {
           <Button size='large' onClick={this.seperateLettersByType}>Seperate Letters By Type</Button>
         </div>
          */}
+         <div>
+         <span></span>
          <h1>Current Letters</h1>
+        <span></span>
+         </div>
         <p className='current-letters-div'>{ currentLetters }</p>
 
         <ul>{ alreadyPlayedWords.map((word, i) => <li key={i}>{word}</li>) }</ul>

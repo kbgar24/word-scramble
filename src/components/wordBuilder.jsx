@@ -24,11 +24,12 @@ export default class WordBuilder extends Component {
   render = () => {
     return(
     <div>
-      <form id="FORM" onSubmit={this.handleSubmit}>
+      <form className='wordBuilder' onSubmit={this.handleSubmit}>
         <input 
           value={this.state.value}
           onChange={this.handleChange}
           className='wordInput'
+          placeholder='Type word here...'
         />
         {/* <input 
           type='submit'

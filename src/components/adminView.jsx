@@ -48,14 +48,9 @@ class AdminView extends Component {
   render = () => {
       return (
         <div className='admin-view'>
-          <h2>Admin View</h2>
- 
-
-    
-
+          <h2>Admin Portal</h2>
+          <div className='admin-sep'></div>
           
-          <h4>Outside Users</h4>
-
           <Table celled inverted selectable>
 
             <Table.Header>
@@ -94,6 +89,7 @@ class AdminView extends Component {
           </div>
           <Button primary onClick={() => { }}>Begin New Game!</Button>
 
+          <div className='admin-sep'></div>
 
         </div>
     );
