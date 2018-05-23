@@ -51,6 +51,33 @@ export default class Lobby extends Component {
     console.log('roomID: ', roomId)
     let newRoom;
     
+    console.log('lobby nextProps: ', nextProps);
+    
+    const occupiedRoomData = nextProps.state.data.users.reduce((tv, {currentRoom, isAdmin, name }) => {
+      if (currentRoom === 'Lobby'){
+        return tv;
+      }
+      tv[currentRoom] 
+      ? tv[currentRoom]++ 
+      : tv[currentRoom] = { count:  1};
+      isAdmin && (tv[currentRoom].admin = name);
+      return tv;
+    }, {});
+
+    console.log('occuredRoomDATa: ', occupiedRoomData);
+
+    // const rooms = nextProps.state.data.rooms
+    //   .filter(({ name }) => name !== 'Lobby' && name !== this.props.state.user.currentUser.currentRoom)
+    //   .map(({ name }) => {
+
+    //     const usersInRoom = this.props.state.data.users
+    //       .filter(({ currentRoom }) => currentRoom === name)
+    //     const count = usersInRoom.length;
+    //     console.log('usersInRoom: ', usersInRoom);
+    //     const adminObj = usersInRoom.find(({ isAdmin }) => isAdmin);
+    //     const admin = adminObj ? adminObj.name : '';
+    //     console.log('admin: ', admin);
+
     if (roomId) {
       newRoom = nextProps.state.data.rooms.find(({id}) => id === roomId);
     }
@@ -93,6 +120,7 @@ export default class Lobby extends Component {
       ...prevState,
       currentUser,
       invites,
+      occupiedRoomData,
     });
   }
 
@@ -171,6 +199,17 @@ export default class Lobby extends Component {
     const activeItem = 'home';
 
     this.nameInput && this.nameInput.focus();
+
+
+    // const allRooms = this.props.state.data.rooms;
+    // const occupiedRooms = Object.keys(this.state.occupiedRoomData).map(roomName => roomName);
+    // const emptyRooms = allRooms
+    //   .filter(({ name }) => !occupiedRooms.includes(name) && name !== this.state.newRoom)
+    //   .map(({ name }) => name);
+    // emptyRooms.length && console.error('EMPTY ROMS: ', emptyRooms);
+    // emptyRooms.forEach(roomName => {
+    //   firebase.database().ref(`rooms/${roomName}`).remove();
+    // });
     
     return (
       <div >
@@ -203,6 +242,7 @@ export default class Lobby extends Component {
               <form onSubmit={this.handleCreateNewRoom}>
                 <input 
                   ref={(input) => { this.nameInput = input; }}
+                  maxLength='10'
                   className='newRoomInput'
                   placeholder='Enter Room Name' type='text' value={this.state.newRoom} onChange={this.newRoomChange} />
                <Button positive className='new-game-btn' >Create New Game</Button>
@@ -281,16 +321,23 @@ export default class Lobby extends Component {
                   </Table.Header>
 
                   <Table.Body>
-                    { this.props.state.data.rooms
-                      .filter(({name}) => name !== 'Lobby' && name !== this.props.state.user.currentUser.currentRoom)
-                      .map(({name}) => (
-                        <Table.Row>
-                          <Table.Cell>{name}</Table.Cell>
-                          <Table.Cell>Kendrick</Table.Cell>
-                          <Table.Cell >5</Table.Cell>
-                          <Table.Cell ><Button size='huge' positive onClick={this.handleJoinRoom(name)}>Join</Button></Table.Cell>
-                        </Table.Row>
-                    ))}
+                    
+                     
+                        
+           
+{console.log('data:baby: ', Object.keys(this.state.occupiedRoomData)) }
+                      {  Object.keys(this.state.occupiedRoomData).map((roomName, i) => {
+                          const { admin, count } = this.state.occupiedRoomData[roomName];
+                          return (
+                            <Table.Row key={i}>
+                            <Table.Cell>{roomName}</Table.Cell>
+                            <Table.Cell>{admin}</Table.Cell>
+                            <Table.Cell >{count}</Table.Cell>
+                            <Table.Cell ><Button size='huge' positive onClick={this.handleJoinRoom(name)}>Join</Button></Table.Cell>
+                          </Table.Row>
+                        )
+                      })
+                    }
                   </Table.Body>
                 </Table>
 

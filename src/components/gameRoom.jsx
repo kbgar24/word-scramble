@@ -55,6 +55,11 @@ export default class GameRoom extends Component {
     }
   }
 
+
+  componentDidMount(){
+    window.addEventListener('onbeforeunload', () => { alert('unload!!!!') });
+  }
+
   generateNewLetters = () => {
     
     const currentLetters = generateLetterList().join('');
@@ -179,6 +184,7 @@ export default class GameRoom extends Component {
 
     return { totalScore, lastWordScore };
   }
+
 
   render = () => {
     const { totalScore, lastWordScore, scoreBoard, alreadyPlayedWords, wordStatus } = this.state;

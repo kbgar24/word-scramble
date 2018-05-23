@@ -60,6 +60,10 @@ class App extends Component {
     super();
   }
 
+  componentDidCatch(error, info){
+    console.error(error, info)
+  }
+
   render(){
     return(
     <BrowserRouter>
