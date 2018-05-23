@@ -56,10 +56,6 @@ export default class GameRoom extends Component {
   }
 
 
-  componentDidMount(){
-    window.addEventListener('onbeforeunload', () => { alert('unload!!!!') });
-  }
-
   generateNewLetters = () => {
     
     const currentLetters = generateLetterList().join('');

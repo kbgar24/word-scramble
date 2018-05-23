@@ -1,0 +1,89 @@
+import React, { Component } from 'react';
+import firebase from 'firebase';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
+
+import { login, getUser, googleLogin } from '../actions/userActions';
+import { uiConfig } from '../config';
+import { updateCurrentUser } from '../actions/userActions.js';
+import { fetchAllData } from '../actions/fetchActions.js';
+import { auth, database } from '../firebase';
+
+class Login extends Component {
+  
+  state = {}
+
+  componentDidMount() {
+
+    /*  Load all app data from db */
+    this.props.fetchAllData();
+
+    this.unregisterAuthObserver = auth.onAuthStateChanged(
+      (user) => {
+        let userId;
+        if (user) {
+          const currentUser = {
+            name: user.displayName,
+            isLoggedIn: true,
+            currentRoom: 'Lobby',
+            id: user.uid,
+          }
+          database.ref('users/' + user.uid).set(currentUser)
+          fetchAllData();
+          userId = user.uid
+        } else {
+          userId = '';
+        }
+        /*  Login user */
+        this.props.updateCurrentUser(userId);
+        this.props.fetchAllData();
+      }
+    )
+
+    /*  Persist Authentication to Local Storage */
+    auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+      .then(function () {
+        return auth.signInWithRedirect;
+      })
+      .catch(function (error) {
+        var errorCode = error.code;
+        var errorMessage = error.message;
+      });
+
+  }
+
+  componentWillUnmount() {
+    this.unregisterAuthObserver()
+  }
+
+  static getDerivedStateFromProps = nextProps => {
+    const { user, history } = nextProps;
+    const desiredPath = history.location.state ? history.location.state.referrer : '/'
+    
+    /*  If the user is logged in, redirect to desired endpoint */
+    if (user.currentUser) {
+      history.push(desiredPath);
+    }
+    return null;
+  }
+ 
+  render = () => (
+    <div>
+        <h3>Please sign-in:</h3>
+        <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={auth} />
+    </div>
+  );
+}
+
+const mapStateToProps = state => ({
+  user: state.user,
+})
+
+const mapDispatchToProps = dispatch => ({
+  updateCurrentUser: userId => dispatch(updateCurrentUser(userId)),
+  fetchAllData: () => dispatch(fetchAllData()),
+})
+
+/*  Use withRouter to keep Redux apprised page redirects */
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Login));
