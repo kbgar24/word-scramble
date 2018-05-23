@@ -34,6 +34,8 @@ class AdminView extends Component {
   }
 
   handleSendInvite = recipientId => e => {
+    const hideId = `hide-${recipientId}`;
+    this.setState({ [hideId]: true })
     const roomId = this.props.state.data.rooms.find(({ name }) => name === this.props.currentRoom).id
     database
       .ref(`users/${recipientId}/invites`)
@@ -66,8 +68,8 @@ class AdminView extends Component {
                   <Table.Row>
                   <Table.Cell>{name}</Table.Cell>
                     <Table.Cell>
-                      <Button positive onClick={this.handleSendInvite(id)}>
-                        Send Invite
+                      <Button disabled={ this.state[`hide-${id}`] } color='facebook' onClick={this.handleSendInvite(id)}>
+                        { !this.state[`hide-${id}`] ? 'Send Invite' : 'Invite Sent!' }
                       </Button>
                     </Table.Cell>
                   </Table.Row>
@@ -78,7 +80,7 @@ class AdminView extends Component {
 
           <CopyToClipboard text={this.state.value}
             onCopy={() => this.setState({ copied: true })}>
-            <Button positive onClick={this.handleGetLink}>Generate Invitation Link</Button>
+            <Button color='facebook'  onClick={this.handleGetLink}>Generate Invitation Link</Button>
           </CopyToClipboard >
           <div className='copy-text'> 
             {
@@ -87,7 +89,7 @@ class AdminView extends Component {
               && 'Link Copied to Clipboard!'
             }
           </div>
-          <Button primary onClick={() => { }}>Begin New Game!</Button>
+          <Button color='youtube' onClick={() => { }}>Begin New Game!</Button>
 
           <div className='admin-sep'></div>
 

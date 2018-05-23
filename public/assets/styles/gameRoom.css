@@ -151,6 +151,7 @@ button.ui.button {
 
 .gameRoom table.table.ui.inverted.table {
   font-size: 0.8em;
+  color: #A2B4C2;
 }
 
 .admin-view {
@@ -174,4 +175,8 @@ button.ui.button {
 button + .admin-sep {
   margin-top: 20px;
   /* margin-bottom: 50px; */
+}
+
+.ui.inverted.definition.table tr td:first-child, .ui.inverted.table th {
+  color:  #A2B4C2 !important;
 }
