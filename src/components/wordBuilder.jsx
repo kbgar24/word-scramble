@@ -30,10 +30,10 @@ export default class WordBuilder extends Component {
           onChange={this.handleChange}
           className='wordInput'
         />
-        <input 
+        {/* <input 
           type='submit'
           value='Check Word'
-        />
+        /> */}
       </form>
     </div>
     )

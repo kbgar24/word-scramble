@@ -90,7 +90,7 @@ export default class LetterGenerator extends React.Component {
     return (
       <div className='letter-generator'>
         { 
-          this.props.admin && !this.props.hasStarted &&
+          // this.props.admin && !this.props.hasStarted &&
           <Button primary onClick={this.handleGenerate}>Begin New Game!</Button>
         
         }

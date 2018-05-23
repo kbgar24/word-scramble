@@ -31,7 +31,7 @@ export default class CountdownWrapper extends Component {
 
   render() {
     return (
-      <div className='countdown-timer'>
+      <div className='countdown-timer' style={{ color: this.props.timerColor }}>
         { 
           this.state.startTime
           ? <Countdown

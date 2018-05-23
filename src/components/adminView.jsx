@@ -47,32 +47,13 @@ class AdminView extends Component {
 
   render = () => {
       return (
-        <div>
+        <div className='admin-view'>
           <h2>Admin View</h2>
  
 
+    
+
           
-          <button onClick={this.handleGetLink}>Generate Invitation Link</button>
-          { this.state.showCopy && (
-          <div>
-            <input 
-              style={inputStyle}
-              value={this.state.value}
-              onChange={({ target: { value } }) => this.setState({ value, copied: false })} />
-
-            {/* <CopyToClipboard text={this.state.value}
-              onCopy={() => this.setState({ copied: true })}>
-              <span>Copy to clipboard with span</span>
-            </CopyToClipboard> */}
-
-            <CopyToClipboard text={this.state.value}
-              onCopy={() => this.setState({ copied: true })}>
-              <button>Copy to clipboard</button>
-            </CopyToClipboard>
-
-            {this.state.copied ? <span style={{ color: 'red' }}>Copied.</span> : null}
-          </div>
-          )}
           <h4>Outside Users</h4>
 
           <Table celled inverted selectable>
@@ -80,7 +61,7 @@ class AdminView extends Component {
             <Table.Header>
               <Table.Row>
                 <Table.HeaderCell>Player Name</Table.HeaderCell>
-                <Table.HeaderCell>Send Invite</Table.HeaderCell>
+                <Table.HeaderCell>Invitation</Table.HeaderCell>
               </Table.Row>
             </Table.Header>
 
@@ -100,11 +81,19 @@ class AdminView extends Component {
             </Table.Body>
           </Table>
 
-          <ul>
-            { this.state.outsiders.map(({name, currentRoom, id}) => (
-              <li key={id}> {name} - {currentRoom} <button onClick={this.handleSendInvite(id)}>Send Invite</button></li>
-            )) }
-          </ul>
+          <CopyToClipboard text={this.state.value}
+            onCopy={() => this.setState({ copied: true })}>
+            <Button positive onClick={this.handleGetLink}>Generate Invitation Link</Button>
+          </CopyToClipboard >
+          <div className='copy-text'> 
+            {
+              this.state.showCopy
+              && this.state.copied 
+              && 'Link Copied to Clipboard!'
+            }
+          </div>
+          <Button primary onClick={() => { }}>Begin New Game!</Button>
+
 
         </div>
     );

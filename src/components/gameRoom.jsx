@@ -19,6 +19,7 @@ export default class GameRoom extends Component {
       lastWordScore: 0,
       totalScore: 0,
       showScoreboard: false,
+      timerColor: 'white',
     }
   }
 
@@ -46,11 +47,15 @@ export default class GameRoom extends Component {
           .update({ totalScore: 0, lastWordScore: 0 })
       }
     })
-      
+      setTimeout(() => {
+        this.setState({ timerColor: 'red' })
+      }, 10000);
+
       setTimeout(() => {
       database
         .ref(`rooms/${this.props.currentUser.currentRoom}`)
         .update({ hasStarted: false, startTime: false, showScoreboard: true })
+        this.setState({ timerColor: 'white' })
     }, 20100)
     this.handleGameOver();
   }
@@ -158,7 +163,7 @@ export default class GameRoom extends Component {
          { this.props.currentUser.isAdmin ? 'Close Room' : 'Leave Room' }
         </Button>
       <Grid>
-        <Grid.Column width={4}>
+        <Grid.Column width={3}>
 
             {
               this.props.currentUser.isAdmin &&
@@ -197,10 +202,12 @@ export default class GameRoom extends Component {
 
         </Grid.Column>
         
-        <Grid.Column width={8}>
+        <Grid.Column width={10}>
             <CountdownWrapper
               hasStarted={this.state.hasStarted}
-              startTime={this.state.startTime} />
+              startTime={this.state.startTime} 
+              timerColor={this.state.timerColor}
+              />
 
             <LetterGenerator
               admin={this.props.currentUser.isAdmin}
@@ -216,7 +223,7 @@ export default class GameRoom extends Component {
         </Grid.Column>
 
 
-        <Grid.Column width={4} >
+        <Grid.Column width={3} >
 
 
             <div className='in-game-score'>
