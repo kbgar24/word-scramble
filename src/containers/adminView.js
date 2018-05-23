@@ -11,13 +11,10 @@ const inputStyle = {
 
 class AdminView extends Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      value: '',
-      copied: false,
-      showCopy: false
-    }
+  state = {
+    value: '',
+    copied: false,
+    showCopy: false
   }
 
   static getDerivedStateFromProps = (nextProps) => {
@@ -29,8 +26,7 @@ class AdminView extends Component {
     const roomId = this.props.state.data.rooms.find(({ name }) => name === this.props.currentRoom).id
     const url = `http://localhost:8080/gameroom/${roomId}`;
     this.setState({ value: url, showCopy: true })
-    setTimeout(() => { this.setState({ copied: false }) }, 6000);
-    // alert(`The invitation link is: http://localhost:8080/gameroom/${roomId}`)
+    setTimeout(() => { this.setState({ copied: false }) }, 4000);
   }
 
   handleSendInvite = recipientId => e => {
@@ -46,10 +42,10 @@ class AdminView extends Component {
       })
   }
 
-
   render = () => {
       return (
         <div className='admin-view'>
+        
           <h2>Admin Portal</h2>
           <div className='admin-sep'></div>
           
@@ -65,10 +61,14 @@ class AdminView extends Component {
             <Table.Body>
               {
                 this.state.outsiders.map(({ name, id }) => (
-                  <Table.Row>
+                  <Table.Row key={id}>
                   <Table.Cell>{name}</Table.Cell>
                     <Table.Cell>
-                      <Button disabled={ this.state[`hide-${id}`] } color='facebook' onClick={this.handleSendInvite(id)}>
+                      <Button
+                        disabled={ this.state[`hide-${id}`] } 
+                        color='facebook' 
+                        onClick={this.handleSendInvite(id)}
+                      >
                         { !this.state[`hide-${id}`] ? 'Send Invite' : 'Invite Sent!' }
                       </Button>
                     </Table.Cell>
@@ -82,6 +82,7 @@ class AdminView extends Component {
             onCopy={() => this.setState({ copied: true })}>
             <Button color='facebook'  onClick={this.handleGetLink}>Generate Invitation Link</Button>
           </CopyToClipboard >
+          
           <div className='copy-text'> 
             {
               this.state.showCopy
@@ -89,10 +90,10 @@ class AdminView extends Component {
               && 'Link Copied to Clipboard!'
             }
           </div>
+          
           <Button color='youtube' onClick={this.props.generateNewLetters}>Begin New Game!</Button>
-     
 
-        </div>
+      </div>
     );
   }
 };

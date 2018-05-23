@@ -1,15 +1,20 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import firebase from 'firebase';
 import uuid from 'uuid';
 import { Table, Segment, Menu, Icon, Sidebar, Button, Image, Header } from 'semantic-ui-react';
 
 import LetterGenerator from '../components/letterGenerator.jsx';
-import GameRoom from '../containers/gameRoomContainer';
-import Lobby from './lobby';
+import GameRoom from './gameRoom';
+import Lobby from '../components/lobby';
+
 import { mapObjToArray } from '../helpers';
+import { fetchData } from '../actions/fetchActions';
+import { createNewRoom } from '../actions/roomActions';
+import { joinUserRoom } from '../actions/userActions';
 
-
-export default class Main extends Component {
+class Main extends Component {
 
   state = {
     newRoom: '',
@@ -185,3 +190,14 @@ export default class Main extends Component {
   </div>
   )
 }
+
+const mapStateToProps = state => ({ state })
+
+const mapDispatchToProps = dispatch => ({
+  fetchData: () => dispatch(fetchData()),
+  createNewRoom,
+  joinUserRoom: roomName => dispatch(joinUserRoom(roomName)),
+
+});
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Main));

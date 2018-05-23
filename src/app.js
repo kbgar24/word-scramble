@@ -4,7 +4,7 @@ import { BrowserRouter, Route, Link, Switch, withRouter } from 'react-router-dom
 import { Provider, connect } from 'react-redux';
 
 import AuthenticationGateway from './containers/AuthenticationGateway';
-import Lobby from './containers/lobbyContainer';
+import Main from './containers/main';
 import Login from './containers/login';
 import store from './store';
 
@@ -21,7 +21,7 @@ class App extends Component {
       <Switch>
         <Route path='/login' component={ Login }></Route>
         <AuthenticationGateway>
-          <Route path='/' component={ Lobby } ></Route>
+          <Route path='/' component={ Main } ></Route>
         </AuthenticationGateway>
         <Route component={ NotFoundPage }></Route>
       </Switch>

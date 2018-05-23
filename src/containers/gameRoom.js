@@ -1,32 +1,31 @@
 import React, { Component } from 'react';
-import LetterGenerator from './letterGenerator.jsx';
-import Timer from './timer.jsx';
-// import Countdown from 'react-countdown-now';
-import CountdownWrapper from './countdownWrapper.jsx';
-import { isRealWord, scoreMap, mapObjToArray, generateLetterList, isWordInLetters } from '../helpers';
-import { findLocalNegativePatterns } from 'fast-glob/out/managers/tasks';
-import { database } from '../firebase';
-import AdminView from './adminView.jsx';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import { Table, Segment, Menu, Icon, Sidebar, Button, Image, Header, Grid } from 'semantic-ui-react';
 
+import LetterGenerator from './letterGenerator.jsx';
+import CountdownWrapper from '../containers/countdownWrappe';
+import AdminView from './adminView';
 
-export default class GameRoom extends Component {
+import fetchData from '../actions/fetchActions';
+import { updateUserRoom } from '../actions/userActions';
+import { isRealWord, scoreMap, mapObjToArray, generateLetterList, isWordInLetters } from '../helpers';
+import { database } from '../firebase';
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      hasStarted: false,
-      lastWordScore: 0,
-      totalScore: 0,
-      showScoreboard: false,
-      timerColor: 'white',
-    }
+
+class GameRoom extends Component {
+
+  state = {
+    hasStarted: false,
+    lastWordScore: 0,
+    totalScore: 0,
+    showScoreboard: false,
+    timerColor: 'white',
   }
 
   static getDerivedStateFromProps = (nextProps, prevState) => {
     
     const { currentUser: { currentRoom, lastWordScore = 0, totalScore = 0 } } = nextProps
-    console.log('nextProps gameRoom: ', nextProps);
 
     const { 
       hasStarted,
@@ -91,10 +90,8 @@ export default class GameRoom extends Component {
     const isPlayedAlready = alreadyPlayedWords.includes(word);
     const isValid = isWordInLetters(word, currentLetters.split(''));
     
-    if (isValid && !isPlayedAlready) {
-      this.handleValidWord(word);
-    }
-
+    isValid && !isPlayedAlready && this.handleValidWord(word);
+ 
     const wordStatus = isPlayedAlready
       ? 'alreadyPlayed'
       : isValid
@@ -102,7 +99,6 @@ export default class GameRoom extends Component {
         : 'notValid'
 
     this.setState({ wordStatus })
-
   }
   
   handleValidWord = word => {
@@ -183,9 +179,18 @@ export default class GameRoom extends Component {
 
 
   render = () => {
-    const { totalScore, lastWordScore, scoreBoard, alreadyPlayedWords, wordStatus } = this.state;
-    const currentRoom = this.props.currentUser.currentRoom;
-    const currentRoomObj = this.props.state.data.rooms.find(({ name }) => name === currentRoom)
+    const { 
+      totalScore,
+      lastWordScore,
+      scoreBoard,
+      alreadyPlayedWords,
+      wordStatus,
+      hasStarted,
+      startTime,
+      timerColor } = this.state;
+    const { users } = this.props.state.data;
+    const { currentRoom:myCurrentRoom, isAdmin } = this.props.currentUser;
+    const currentRoomObj = this.props.state.data.rooms.find(({ name }) => name === myCurrentRoom)
     const { currentLetters } = currentRoomObj;
     
     return (
@@ -195,9 +200,9 @@ export default class GameRoom extends Component {
           <Grid.Column width={3}>
             
             {
-              this.props.currentUser.isAdmin &&
+              isAdmin &&
               <AdminView 
-                currentRoom={this.state.currentRoom}
+                currentRoom={myCurrentRoom}
                 generateNewLetters={this.generateNewLetters}
               />
             }
@@ -216,16 +221,16 @@ export default class GameRoom extends Component {
 
                 <Table.Body>
                   {
-                    this.state.scoreBoard 
-                    ? this.state.scoreBoard.map(({ name, totalScore }, i) => (
+                    scoreBoard 
+                    ? scoreBoard.map(({ name, totalScore }, i) => (
                       <Table.Row key={i}>
                         <Table.Cell>{name}</Table.Cell>
                         <Table.Cell>{totalScore}</Table.Cell>
                       </Table.Row>
                     ))
                     
-                    : this.props.state.data.users
-                      .filter(({ currentRoom }) => currentRoom === this.props.currentUser.currentRoom)
+                    : users
+                      .filter(({ currentRoom }) => currentRoom === myCurrentRoom)
                       .map(({ name, id }) => (
                         <Table.Row key={id}>
                           <Table.Cell>{name}</Table.Cell>
@@ -242,18 +247,18 @@ export default class GameRoom extends Component {
           <Grid.Column width={10}>
           
             <CountdownWrapper
-              hasStarted={this.state.hasStarted}
-              startTime={this.state.startTime} 
-              timerColor={this.state.timerColor}
+              hasStarted={hasStarted}
+              startTime={startTime} 
+              timerColor={timerColor}
               />
 
             <LetterGenerator
-              admin={this.props.currentUser.isAdmin}
+              admin={isAdmin}
               alreadyPlayed={currentRoomObj.alreadyPlayed}
               currentLetters={currentLetters}
               handleValidWord={this.handleValidWord}
-              hasStarted={this.state.hasStarted}
-              lastWordScore={this.state.lastWordScore}
+              hasStarted={hasStarted}
+              lastWordScore={lastWordScore}
               isValidWord={this.isValidWord}
             />
 
@@ -266,9 +271,9 @@ export default class GameRoom extends Component {
               negative
               size='huge'
               name='Lobby'
-              onClick={() => { this.props.handleLeaveRoom(this.props.currentUser.isAdmin) }}
+              onClick={() => { this.props.handleLeaveRoom(isAdmin) }}
             >
-              {this.props.currentUser.isAdmin ? 'Close Room' : 'Leave Room'}
+              {isAdmin ? 'Close Room' : 'Leave Room'}
             </Button>
 
             <div className='admin-sep panel'></div>
@@ -291,7 +296,7 @@ export default class GameRoom extends Component {
                         wordStatus === 'isValid' && (
                           <div style={{ color: 'gold' }}>
                             <h1>Valid Word!</h1>
-                            <h1>{`+${this.state.lastWordScore} points!`}</h1>
+                            <h1>{`+${lastWordScore} points!`}</h1>
                           </div>
                         )
                       }
@@ -334,3 +339,12 @@ export default class GameRoom extends Component {
     )
   }
 };
+
+
+const mapStateToProps = state => ({ state })
+
+const mapDispatchToProps = dispatch => ({
+  updateUserRoom: (userId, roomName) => dispatch(updateUserRoom(userId, roomName)),
+})
+
+export default withRouter(connect(mapStateToProps)(GameRoom));
