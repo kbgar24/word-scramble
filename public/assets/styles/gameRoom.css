@@ -90,6 +90,8 @@ div.copy-text {
   font-size: 14px;
   text-align: center;
   height: 20px;
+  font-weight: 900;
+  font-style: italic;
 
 }
 
@@ -225,7 +227,7 @@ div.hotKey {
   width: 90%;
 }
 
-.hotkey > h2 {
+.hotKey > h2 {
   text-align: center;
   margin: 30px auto 0px auto;
 }

@@ -250,7 +250,7 @@ class GameRoom extends Component {
                 <Table.Body>
                   
                   <Table.Row>
-                    <Table.Cell>Scramble Letters</Table.Cell>
+                    <Table.Cell>Shuffle Letters</Table.Cell>
                     <Table.Cell> Option + F </Table.Cell>
                   </Table.Row>
 

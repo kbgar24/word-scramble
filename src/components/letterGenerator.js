@@ -37,13 +37,20 @@ export default class LetterGenerator extends React.Component {
     this.setState({ currentLetters })
   }
 
+  handleKeyDown = ({ altKey, keyCode }) => {
+    altKey && keyCode === 70 && this.scrambleLetterList();
+    altKey && keyCode === 74 && this.seperateLettersByType();
+  }
+
   render () {
     const { wordStatus, currentLetters, alreadyPlayedWords, totalScore, lastWordScore } = this.state;
  
     wordStatus && setTimeout(() => { this.setState({ wordStatus: '' }) }, 2500);
 
     return (
-      <div className='letter-generator'>
+      <div className='letter-generator'
+        onKeyDown={this.handleKeyDown}
+      >
         
         <div>
           <span></span>
