@@ -7,6 +7,10 @@ import LetterGenerator from '../components/letterGenerator';
 import CountdownWrapper from '../components/countdownWrapper';
 import AdminView from './adminView';
 import GameRulesModal from '../components/gameRulesModal';
+import Scoreboard from '../components/Scoreboard';
+import Hotkeys from '../components/hotkeys';
+import InGameScore from '../components/inGameScore';
+import RecentWords from '../components/recentWords';
 
 import fetchData from '../actions/fetchActions';
 import { updateUserRoom, updateUserInfo } from '../actions/userActions';
@@ -200,73 +204,9 @@ class GameRoom extends Component {
                 generateNewLetters={this.generateNewLetters}
               />
             }
+            <Scoreboard scoreBoard={scoreBoard} users={users} myCurrentRoom={myCurrentRoom} />
             
-            <div className='scoreboard-div'>
-              <h2>Scoreboard</h2>
-              <div className='admin-sep'></div>
-              <Table celled inverted selectable>
-
-                <Table.Header>
-                  <Table.Row>
-                    <Table.HeaderCell>Player Name</Table.HeaderCell>
-                    <Table.HeaderCell>Total Score</Table.HeaderCell>
-                  </Table.Row>
-                </Table.Header>
-
-                <Table.Body>
-                  {
-                    scoreBoard 
-                    ? scoreBoard.map(({ name, totalScore }, i) => (
-                      <Table.Row key={i}>
-                        <Table.Cell>{name}</Table.Cell>
-                        <Table.Cell>{totalScore}</Table.Cell>
-                      </Table.Row>
-                    ))
-                    
-                    : users
-                      .filter(({ currentRoom }) => currentRoom === myCurrentRoom)
-                      .map(({ name, id }) => (
-                        <Table.Row key={id}>
-                          <Table.Cell>{name}</Table.Cell>
-                          <Table.Cell>{0}</Table.Cell>
-                        </Table.Row>
-                      ))
-                  }
-                </Table.Body>
-              </Table>
-            </div>
-
-            <div className='hotKey'>
-              <h2>Game Play</h2>
-              <div className='admin-sep'></div>
-              <Table celled inverted selectable>
-                
-                <Table.Header>
-                  <Table.Row>
-                    <Table.HeaderCell>Action</Table.HeaderCell>
-                    <Table.HeaderCell>Hotkey</Table.HeaderCell>
-                  </Table.Row>
-                </Table.Header>
-                
-                <Table.Body>
-                  
-                  <Table.Row>
-                    <Table.Cell>Shuffle Letters</Table.Cell>
-                    <Table.Cell> Option + F </Table.Cell>
-                  </Table.Row>
-
-                  <Table.Row>
-                    <Table.Cell>Seperate Vowels</Table.Cell>
-                    <Table.Cell>Option + J </Table.Cell>
-                  </Table.Row>
-
-                </Table.Body>
-              </Table>
-            </div>
-
-            {/* <Button> Game Rules </Button> */}
             <GameRulesModal />
-          
 
           </Grid.Column>
         
@@ -289,11 +229,10 @@ class GameRoom extends Component {
             />
 
 
-
-
           </Grid.Column>
 
           <Grid.Column width={3} >
+            
             <Button
               negative
               size='huge'
@@ -305,61 +244,11 @@ class GameRoom extends Component {
 
             <div className='admin-sep panel'></div>
 
-
-            <div className='in-game-score'>
-            
-              <Table inverted>
-
-                <Table.Header>
-                  <Table.Row>
-                    <Table.HeaderCell>Game Status</Table.HeaderCell>
-                  </Table.Row>
-                </Table.Header>
-
-                <Table.Body>
-                  <Table.Row>
-                    <Table.Cell>
-                      {
-                        wordStatus === 'isValid' && (
-                          <div style={{ color: 'gold' }}>
-                            <h1>Valid Word!</h1>
-                            <h1>{`+${lastWordScore} points!`}</h1>
-                          </div>
-                        )
-                      }
-
-                      {wordStatus === 'alreadyPlayed' && <h1 style={{ color: 'red' }}>Already Played!</h1>}
-                      {wordStatus === 'notValid' && <h1 style={{ color: 'red' }}>Invalid Word!</h1>}
-                    </Table.Cell>
-                  </Table.Row>
-                </Table.Body>
-              </Table>
-            </div>
-
+            <InGameScore wordStatus={wordStatus} lastWordScore={lastWordScore} />
+   
             <div className='admin-sep panel'></div>
 
-            <div className='recent-words'>
-
-              <Table inverted>
-                <Table.Header>
-                  <Table.Row>
-                    <Table.HeaderCell>Recent Words</Table.HeaderCell>
-                  </Table.Row>
-                </Table.Header>
-
-                <Table.Body>
-                  { 
-                    Array(6).fill('').concat(alreadyPlayedWords).reverse().slice(0, 6).map((word, i) => (
-                      <Table.Row key={i}>
-                        <Table.Cell>
-                          { word }
-                        </Table.Cell>
-                      </Table.Row>
-                    ))
-                  }
-                </Table.Body>
-              </Table>
-              </div>
+            <RecentWords alreadyPlayedWords={alreadyPlayedWords} />
 
           </Grid.Column>
         </Grid>
