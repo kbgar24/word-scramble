@@ -8,7 +8,10 @@ export default class WordBuilder extends Component {
   }
 
   handleChange = ({ target: { value } }) => {
-    this.setState({ value });
+    const lettersRegex = /^[a-zA-Z]+$/;
+    if (value === '' || lettersRegex.test(value)) {
+      this.setState({ value })
+    }
   }
 
   handleSubmit = (e) => {

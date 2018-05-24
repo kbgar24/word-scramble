@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Table, Segment, Menu, Icon, Sidebar, Button, Image, Header } from 'semantic-ui-react';
+import { onlyLetters } from '../helpers';
 
 
 export default class Lobby extends Component {
@@ -13,7 +14,11 @@ export default class Lobby extends Component {
             ref={(input) => { this.nameInput = input; }}
             maxLength='10'
             className='newRoomInput'
-            placeholder='Enter Room Name' type='text' value={this.props.newRoom} onChange={this.props.newRoomChange} />
+            placeholder='Enter Room Name' 
+            type='text' 
+            value={this.props.newRoom} 
+            onChange={this.props.newRoomChange} 
+          />
 
           <Button positive className='new-game-btn' >Create New Game</Button>
 

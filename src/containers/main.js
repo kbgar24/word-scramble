@@ -78,7 +78,12 @@ class Main extends Component {
   }
 
   newRoomChange = ({ target: { value: newRoom } }) => {
-    this.setState({ newRoom })
+    
+    /* Scrub input for only letters */
+    const lettersRegex = /^[a-zA-Z]+$/;
+    if (newRoom === '' || lettersRegex.test(newRoom)) {
+      this.setState({ newRoom })
+    }
   }
 
   handleUserLoginChange = currentUser => { this.setState({ currentUser }) }

@@ -155,23 +155,24 @@ class GameRoom extends Component {
   scoreWord = word => {
     const { totalScore: oldScore = 0 } = this.state;
     const length = word.length;
-    const isReal = isRealWord(word)
-    let lastWordScore = 0;
+    isRealWord(word)
+  //   .then((res))
+  //   let lastWordScore = 0;
     
-    if (!isReal) {
-      lastWordScore = 2;
-    } else {
-      lastWordScore = scoreMap[length];
-    }
+  //   if (!isReal) {
+  //     lastWordScore = 2;
+  //   } else {
+  //     lastWordScore = scoreMap[length];
+  //   }
 
-    const totalScore = oldScore + lastWordScore;
+  //   const totalScore = oldScore + lastWordScore;
 
-    this.setState({ totalScore, lastWordScore })
+  //   this.setState({ totalScore, lastWordScore })
 
-    return { totalScore, lastWordScore };
+  //   return { totalScore, lastWordScore };
+  // }
+    
   }
-
-
   render = () => {
     const { 
       totalScore,
