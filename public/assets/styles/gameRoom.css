@@ -97,7 +97,7 @@ div.copy-text {
 
 div.ui.grid{
   height: 100vh;
-  min-height: 1000px;
+  min-height: 1050px;
 }
 
 div.three.wide.column {
@@ -230,4 +230,10 @@ div.hotKey {
 .hotKey > h2 {
   text-align: center;
   margin: 30px auto 0px auto;
+}
+
+button.ui.facebook.button.modal-btn {
+  margin: 20px auto 0px auto;
+  display: block;
+  width: 152px;
 }

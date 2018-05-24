@@ -6,6 +6,7 @@ import { Table, Segment, Menu, Icon, Sidebar, Button, Image, Header, Grid } from
 import LetterGenerator from '../components/letterGenerator';
 import CountdownWrapper from '../components/countdownWrapper';
 import AdminView from './adminView';
+import GameRulesModal from '../components/gameRulesModal';
 
 import fetchData from '../actions/fetchActions';
 import { updateUserRoom, updateUserInfo } from '../actions/userActions';
@@ -262,7 +263,11 @@ class GameRoom extends Component {
                 </Table.Body>
               </Table>
             </div>
+
+            {/* <Button> Game Rules </Button> */}
+            <GameRulesModal />
           
+
           </Grid.Column>
         
           <Grid.Column width={10}>
@@ -283,7 +288,8 @@ class GameRoom extends Component {
               isValidWord={this.isValidWord}
             />
 
- 
+
+
 
           </Grid.Column>
 
@@ -354,6 +360,7 @@ class GameRoom extends Component {
                 </Table.Body>
               </Table>
               </div>
+
           </Grid.Column>
         </Grid>
       </div>
