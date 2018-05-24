@@ -74,12 +74,12 @@ class GameRoom extends Component {
     })
       setTimeout(() => {
         this.setState({ timerColor: 'red' })
-      }, 10000);
+      }, 45000);
 
       setTimeout(() => {
         this.props.updateRoomInfo(roomName, { hasStarted: false, startTime: false, showScoreboard: true })
         this.setState({ timerColor: 'white' })
-    }, 20100)
+    }, 60100)
     
     this.handleGameOver();
   }
@@ -115,7 +115,7 @@ class GameRoom extends Component {
     const { totalScore } = this.state;
     setTimeout(() => {
       this.getUserScores()
-    }, 20100)
+    }, 60100)
   }
 
   updateScoreboard = () => {

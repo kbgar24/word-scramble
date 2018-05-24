@@ -12,7 +12,7 @@ export default class CountdownWrapper extends Component {
       { 
         this.state.startTime
         ? <Countdown
-            date={this.state.startTime + 20000}
+            date={this.state.startTime + 60000}
             intervalDelay={0}
             precision={3}
             renderer={props => <div>{(props.total / 1000).toFixed(2)}</div>}
