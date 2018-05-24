@@ -45,22 +45,9 @@ class Main extends Component {
 
     if (roomId) {
       newRoom = nextProps.state.data.rooms.find(({id}) => id === roomId);
-      if (roomId && !newRoom){
-        console.log('nextProps: ', nextProps);
-        console.log('nextProps.state.data.rooms: ', nextProps.state.data.rooms);
-        // alert('whoah!')
-        console.log('room', roomId, newRoom)
-        alert('room', roomId);
-        alert('newRoom', newRoom);
-        
-        // alert('newRoom: ', newRoom);
-        
-        // history.push('/');
-      }
     }
     /*  Handles invite urls */
     if (roomId.length > 5 && newRoom) {
-      // alert('change: ', roomId)
       history.push('/');
       const userInfo = {
         currentRoom: newRoom.name,

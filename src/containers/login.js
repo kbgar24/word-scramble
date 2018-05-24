@@ -58,14 +58,10 @@ class Login extends Component {
   }
 
   static getDerivedStateFromProps = ({ user = {}, history }) => {
-    console.log('user, history: ', user, history);
-    
     const desiredPath = history.location.state ? history.location.state.referrer : '/'
     
     /*  If the user is logged in, redirect to desired endpoint */
     if (user.currentUser) {
-      alert('yes!');
-      alert(desiredPath);
       history.push(desiredPath);
     }
     return null;
