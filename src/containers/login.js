@@ -16,7 +16,8 @@ class Login extends Component {
   componentDidMount() {
 
     /*  Load all app data from db */
-    this.props.fetchAllData();
+    this.props.fetchAllData()
+    // .then(() => { console.log('Hahhahahaha') } );
 
     this.unregisterAuthObserver = auth.onAuthStateChanged(
       (user) => {
@@ -29,7 +30,7 @@ class Login extends Component {
             id: user.uid,
           }
           this.props.setCurrentUser(user.uid, currentUser);
-          fetchAllData();
+          this.props.fetchAllData();
           userId = user.uid
         } else {
           userId = '';
@@ -56,10 +57,8 @@ class Login extends Component {
     this.unregisterAuthObserver()
   }
 
-  static getDerivedStateFromProps = nextProps => {
-    console.log('nextProps: ', nextProps);
-    // const { state: { user = {} } = {}, history } = nextProps;
-    const { user = {}, history } = nextProps;
+  static getDerivedStateFromProps = ({ user = {}, history }) => {
+    console.log('user, history: ', user, history);
     
     const desiredPath = history.location.state ? history.location.state.referrer : '/'
     
@@ -80,9 +79,7 @@ class Login extends Component {
   );
 }
 
-const mapStateToProps = state => ({
-  user: state.user,
-})
+const mapStateToProps = ({ user }) => ({ user })
 
 const mapDispatchToProps = dispatch => ({
   updateCurrentUser: userId => dispatch(updateCurrentUser(userId)),

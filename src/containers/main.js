@@ -55,7 +55,7 @@ class Main extends Component {
         
         // alert('newRoom: ', newRoom);
         
-        history.push('/');
+        // history.push('/');
       }
     }
     /*  Handles invite urls */
@@ -66,7 +66,7 @@ class Main extends Component {
         currentRoom: newRoom.name,
         isAdmin: false,
       }
-      this.props.updateUserInfo(currentUserId, userInfo)
+      nextProps.updateUserInfo(currentUserId, userInfo)
     } 
 
     if (currentUser){

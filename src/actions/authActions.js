@@ -1,4 +1,4 @@
-import { updateCurrentUser } from './userActions';
+import { updateCurrentUser, setCurrentUser } from './userActions';
 import { auth, database } from '../firebase';
 import firebase from 'firebase';
 
@@ -27,26 +27,26 @@ const uiConfig = {
 };
 
 
-export const authenticate = () => () => {
-  console.log('authenticate called!');
-  auth.onAuthStateChanged(user => {
-    let currentUser;
-    if (user) {
-      currentUser = {
-        name: user.displayName,
-        isLoggedIn: true,
-        currentRoom: 'Lobby',
-        id: user.uid,
-        score: 0,
-        isAdmin: false,
-      }
-      database.ref('users/' + user.uid).set(currentUser)
-    } else {
-      currentUser = {};
-    }
-    // dispatch(updateCurrentUser(currentUser));
-  })
-}
+// export const authenticate = () => dispatch => (
+//   auth.onAuthStateChanged(user => {
+//     let currentUser;
+//     if (user) {
+//       currentUser = {
+//         name: user.displayName,
+//         isLoggedIn: true,
+//         currentRoom: 'Lobby',
+//         id: user.uid,
+//         score: 0,
+//         isAdmin: false,
+//       }
+//       dispatch(setCurrentUser(user.uid, currentUser))
+//       // database.ref('users/' + user.uid).set(currentUser)
+//     } else {
+//       currentUser = {};
+//     }
+//     // dispatch(updateCurrentUser(currentUser));
+//   })
+// )
 
 export const signOut = id => dispatch => {
   database.ref(`/users/${id}`).set({
