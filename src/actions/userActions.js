@@ -56,20 +56,3 @@ export const sendInvite = (recipientId, inviteInfo) => dispatch => (
 export const setCurrentUser = (userId, userInfo) => dispatch => (
   database.ref('users/' + userId).set(userInfo)
 );
-
-// see if room exists 
-
-
-    // if yes update
-    // if no, create
-  // firebase.database().ref(`rooms`).on('value').then(snapshop => {
-  //   console.log('room snapshot: ', snapshop);
-  // })  
-
-  // firebase.database().ref(`users/${id}`).update({
-  //   currentRoom: roomName,
-  // })
-
-  // firebase.database().ref(`users/${id}`).update({
-  //   currentRoom: roomName,
-  // })

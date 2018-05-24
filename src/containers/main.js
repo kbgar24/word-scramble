@@ -115,6 +115,15 @@ class Main extends Component {
         })
         this.props.removeRoom(currentUserRoom);
 
+        /* Delete outstanding invites */
+        this.props.state.data.users
+          .forEach(({id:userId, invites}) => {
+            invites && Object.keys(invites)
+            .forEach(inviteId => {
+              invites[inviteId].roomName === currentUserRoom && this.props.deleteInvite(userId, inviteId);
+            })
+          })
+
     /* Otherwise just send user to Lobby */
     } else {
       this.props.updateUserInfo(id, { currentRoom: 'Lobby' })
@@ -124,9 +133,10 @@ class Main extends Component {
   }
 
 
-  handleJoinRoom = name => () => {
+  handleJoinRoom = (name, senderName) => () => {
     const id = this.props.state.user.currentUser;
     this.props.updateUserInfo(id, { currentRoom: name })
+    senderName && this.handleInviteDecline(senderName)();
   }
 
   handleInviteDecline = senderName => () => {

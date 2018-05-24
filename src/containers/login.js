@@ -17,7 +17,6 @@ class Login extends Component {
 
     /*  Load all app data from db */
     this.props.fetchAllData()
-    // .then(() => { console.log('Hahhahahaha') } );
 
     this.unregisterAuthObserver = auth.onAuthStateChanged(
       (user) => {

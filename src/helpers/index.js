@@ -28,7 +28,6 @@ export const makeLetterFrequencyMap = arrayofLetters => (
 )
 
 export const isWordInLetters = (word, letters) => {
-  console.log('word, letters: ', word, letters);
   const letterMap = makeLetterFrequencyMap(letters);
   const wordMap = makeLetterFrequencyMap(word.split(''));
   const wordLetters = Object.keys(wordMap);

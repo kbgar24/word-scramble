@@ -19,12 +19,9 @@ export const createNewRoom = (room, userId, roomId) => {
 
 };
 
-
 export const removeRoom = roomName => dispatch => database.ref(`rooms/${roomName}`).remove();
 
 export const updateRoomInfo = (roomName, info) => dispatch => {
-  console.log('roomName: ', roomName)
-  console.log('info: ', info)
   database.ref(`rooms/${roomName}`).update(info)
 }
 export const updateAlreadyPlayed = (roomName, word) => dispatch => (

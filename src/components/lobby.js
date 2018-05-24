@@ -46,7 +46,7 @@ export default class Lobby extends Component {
                 <Table.Cell>{roomName}</Table.Cell>
                 <Table.Cell>
                   <div className='invite-btn-div'>
-                    <Button size='huge' positive onClick={this.props.handleJoinRoom(roomName)}>Accept</Button>
+                    <Button size='huge' positive onClick={this.props.handleJoinRoom(roomName, senderName)}>Accept</Button>
                     <Button size='huge' negative onClick={this.props.handleInviteDecline(senderName)}>Decline</Button>
                   </div>
                 </Table.Cell>
