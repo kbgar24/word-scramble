@@ -2,13 +2,9 @@ import React, { Component } from 'react';
 
 export default class WordBuilder extends Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      value: '',
-      wordStatus: '',
-    }
-
+  state = {
+    value: '',
+    wordStatus: '',
   }
 
   handleChange = ({ target: { value } }) => {
@@ -21,8 +17,7 @@ export default class WordBuilder extends Component {
     this.setState({ value: '' });
   }
 
-  render = () => {
-    return(
+  render = () => (
     <div>
       <form className='wordBuilder' onSubmit={this.handleSubmit}>
         <input 
@@ -31,12 +26,7 @@ export default class WordBuilder extends Component {
           className='wordInput'
           placeholder='Type word here...'
         />
-        {/* <input 
-          type='submit'
-          value='Check Word'
-        /> */}
       </form>
     </div>
-    )
-  };
+  )
 };

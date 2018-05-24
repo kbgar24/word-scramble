@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
-import firebase from 'firebase';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 
-import { login, getUser, googleLogin } from '../actions/userActions';
+
 import { uiConfig } from '../config';
-import { updateCurrentUser } from '../actions/userActions.js';
+import { updateCurrentUser, setCurrentUser } from '../actions/userActions.js';
 import { fetchAllData } from '../actions/fetchActions.js';
-import { auth, database } from '../firebase';
+import { auth, database, authPure, firebase } from '../firebase';
 
 class Login extends Component {
   
@@ -29,7 +28,7 @@ class Login extends Component {
             currentRoom: 'Lobby',
             id: user.uid,
           }
-          database.ref('users/' + user.uid).set(currentUser)
+          this.props.setCurrentUser(user.uid, currentUser);
           fetchAllData();
           userId = user.uid
         } else {
@@ -42,7 +41,7 @@ class Login extends Component {
     )
 
     /*  Persist Authentication to Local Storage */
-    auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+    auth.setPersistence(authPure.Auth.Persistence.LOCAL)
       .then(function () {
         return auth.signInWithRedirect;
       })
@@ -58,11 +57,16 @@ class Login extends Component {
   }
 
   static getDerivedStateFromProps = nextProps => {
-    const { user, history } = nextProps;
+    console.log('nextProps: ', nextProps);
+    // const { state: { user = {} } = {}, history } = nextProps;
+    const { user = {}, history } = nextProps;
+    
     const desiredPath = history.location.state ? history.location.state.referrer : '/'
     
     /*  If the user is logged in, redirect to desired endpoint */
     if (user.currentUser) {
+      alert('yes!');
+      alert(desiredPath);
       history.push(desiredPath);
     }
     return null;
@@ -83,6 +87,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   updateCurrentUser: userId => dispatch(updateCurrentUser(userId)),
   fetchAllData: () => dispatch(fetchAllData()),
+  setCurrentUser: (userId, userInfo) => dispatch(setCurrentUser(userId, userInfo)),
 })
 
 /*  Use withRouter to keep Redux apprised page redirects */

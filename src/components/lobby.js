@@ -100,7 +100,7 @@ export default class Lobby extends Component {
                     <Table.Cell>{roomName}</Table.Cell>
                     <Table.Cell>{admin}</Table.Cell>
                     <Table.Cell >{count}</Table.Cell>
-                    <Table.Cell ><Button size='huge' positive onClick={this.props.handleJoinRoom(name)}>Join</Button></Table.Cell>
+                    <Table.Cell ><Button size='huge' positive onClick={this.props.handleJoinRoom(roomName)}>Join</Button></Table.Cell>
                   </Table.Row>
                 )
               })

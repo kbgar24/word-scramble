@@ -11,13 +11,6 @@ body {
 }
 }
 
-footer {
-  position: absolute;
-  width: 100%;
-  bottom: 0px;
-  left: 0px;
-  height: 100px;
-}
 
 footer>div {   
   background-color: #1b1c1d;
@@ -49,4 +42,14 @@ footer>div p {
 #topMenu {
   font-size: 1.5rem;
   border-radius: 0px;
+}
+
+footer {
+  position: absolute;
+  width: 100%;
+  bottom: 0px;
+  left: 0px;
+  height: 100px;
+  background-color: #1b1c1d;
+  text-align: center;
 }

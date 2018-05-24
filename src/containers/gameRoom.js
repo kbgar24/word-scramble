@@ -3,15 +3,14 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { Table, Segment, Menu, Icon, Sidebar, Button, Image, Header, Grid } from 'semantic-ui-react';
 
-import LetterGenerator from './letterGenerator.jsx';
-import CountdownWrapper from '../containers/countdownWrappe';
+import LetterGenerator from '../components/letterGenerator';
+import CountdownWrapper from '../components/countdownWrapper';
 import AdminView from './adminView';
 
 import fetchData from '../actions/fetchActions';
-import { updateUserRoom } from '../actions/userActions';
+import { updateUserRoom, updateUserInfo } from '../actions/userActions';
+import { updateRoomInfo, updateAlreadyPlayed } from '../actions/roomActions';
 import { isRealWord, scoreMap, mapObjToArray, generateLetterList, isWordInLetters } from '../helpers';
-import { database } from '../firebase';
-
 
 class GameRoom extends Component {
 
@@ -21,6 +20,10 @@ class GameRoom extends Component {
     totalScore: 0,
     showScoreboard: false,
     timerColor: 'white',
+  }
+
+  componentDidMount() {
+    window.scrollTo(0, 0)
   }
 
   static getDerivedStateFromProps = (nextProps, prevState) => {
@@ -59,15 +62,14 @@ class GameRoom extends Component {
     
     const currentLetters = generateLetterList().join('');
 
-    database
-      .ref(`rooms/${this.props.currentUser.currentRoom}`)
-      .update({ showScoreboard: false, currentLetters, hasStarted: true, startTime: Date.now() })
+    const roomName = this.props.currentUser.currentRoom;
+    const roomInfo = { showScoreboard: false, currentLetters, hasStarted: true, startTime: Date.now() }
+
+    this.props.updateRoomInfo(roomName, roomInfo);
     
     this.props.state.data.users.forEach(({currentRoom, id}) => {
       if (currentRoom === this.state.currentRoom){
-        database
-          .ref(`users/${id}`)
-          .update({ totalScore: 0, lastWordScore: 0 })
+        updateUserInfo(id, { totalScore: 0, lastWordScore: 0 })
       }
     })
       setTimeout(() => {
@@ -75,9 +77,7 @@ class GameRoom extends Component {
       }, 10000);
 
       setTimeout(() => {
-      database
-        .ref(`rooms/${this.props.currentUser.currentRoom}`)
-        .update({ hasStarted: false, startTime: false, showScoreboard: true })
+        this.props.updateRoomInfo(roomName, { hasStarted: false, startTime: false, showScoreboard: true })
         this.setState({ timerColor: 'white' })
     }, 20100)
     
@@ -104,15 +104,10 @@ class GameRoom extends Component {
   handleValidWord = word => {
 
     const { totalScore, lastWordScore } = this.scoreWord(word);
-    
-    database
-      .ref(`rooms/${this.props.currentUser.currentRoom}/alreadyPlayed`)
-      .push(word)
-
-    database
-      .ref(`users/${this.props.currentUser.id}`)
-      .update({ totalScore, lastWordScore })
-    
+    const roomName = this.props.currentUser.currentRoom;
+    const userId = this.props.currentUser.id;
+    this.props.updateAlreadyPlayed(roomName, word)
+    this.props.updateUserInfo(userId, { totalScore, lastWordScore })
     this.updateScoreboard();
   }
 
@@ -127,17 +122,16 @@ class GameRoom extends Component {
     
     const scoreBoard = this.props.state.data.users
       .filter(({ currentRoom }) => currentRoom === this.state.currentRoom)
-      .map(({ name, totalScore }) => ({ name, totalScore }))
+      .map(({ name, totalScore = 0 }) => ({ name, totalScore }))
       .sort((a, b) => (
         a.totalScore < b.totalScore
           ? 1
           : -1
       ))
     
-    database
-    .ref(`rooms/${this.props.currentUser.currentRoom}`)
-    .update({ scoreBoard })
-  
+    const roomName = this.props.currentUser.currentRoom;
+    
+    this.props.updateRoomInfo(roomName, { scoreBoard })
   }
   
 
@@ -145,16 +139,16 @@ class GameRoom extends Component {
 
     const scoreBoard = this.props.state.data.users
       .filter(({ currentRoom }) => currentRoom === this.state.currentRoom)
-      .map(({ name, totalScore }) => ({ name, totalScore }))
+      .map(({ name, totalScore = 0 }) => ({ name, totalScore }))
       .sort((a,b) => (
         a.totalScore < b.totalScore
         ? 1
         : -1
       ))
+    const roomName = this.props.currentUser.currentRoom;
+    const roomInfo = { scoreBoard, currentLetters: '', alreadyPlayed: false };
 
-    database
-      .ref(`rooms/${this.props.currentUser.currentRoom}`)
-      .update({ scoreBoard, currentLetters: '', alreadyPlayed: false })
+    this.props.updateRoomInfo(roomName, roomInfo)
 
   }
 
@@ -345,6 +339,9 @@ const mapStateToProps = state => ({ state })
 
 const mapDispatchToProps = dispatch => ({
   updateUserRoom: (userId, roomName) => dispatch(updateUserRoom(userId, roomName)),
+  updateRoomInfo: (roomName, info) => dispatch(updateRoomInfo(roomName, info)),
+  updateAlreadyPlayed: (roomName, word) => dispatch(updateAlreadyPlayed(roomName, word)),
+  updateUserInfo: (userId, userInfo) => dispatch(updateUserInfo(userId, userInfo)),
 })
 
-export default withRouter(connect(mapStateToProps)(GameRoom));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(GameRoom));

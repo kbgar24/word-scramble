@@ -2,7 +2,7 @@
  * 
  * This is a custom-built timer component :)
  * Unfortunately, it was unstable during multiuser play :(
- * So I resorted to a 3rd-party module instead
+ * So I decided to use to a 3rd-party module instead
  * This component is thus provided here just as a reference 
  * 
  * **********************/
@@ -10,17 +10,9 @@
 import React, { Component } from 'react';
 
 export default class Timer extends Component {
-  
-  constructor(props){
-    super(props);
-    this.state = {
-      value: 600
-    }
-  }
 
-  static getDerivedStateFromProps = ({startTimer}, prevState) => {
-    startTimer 
-    return null;
+ state = {
+    value: 600,
   }
 
   handleTimerStart = () => {

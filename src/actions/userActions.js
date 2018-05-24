@@ -1,5 +1,5 @@
 import firebase from 'firebase';
-import { auth, googleProvider, twitterProvider } from '../firebase';
+import { auth, googleProvider, database } from '../firebase';
 
 export const getUser = () => {
   return dispatch => {
@@ -21,31 +21,41 @@ export const getUser = () => {
 }
 
 
-export const logout = () => {
-  return dispatch => auth.signOut();
-}
-
-export function googleLogin() {
-  return dispatch => auth.signInWithPopup(googleProvider);
-}
+export const googleLogin = () => dispatch => auth.signInWithPopup(googleProvider) 
 
 
 export const updateCurrentUser = userId => ({
   type: 'UPDATE_CURRENT_USER',
   payload: userId,
-})
+});
 
 export const joinUserRoom = roomName => ({
   type: 'JOIN_USER_ROOM',
   payload: roomName,
-})
+});
   
 export const leaveUserRoom = roomName => {
   return ({
     type: 'LEAVE_USER_ROOM',
     payload: roomName,
   })
-}
+};
+
+export const updateUserInfo = (userId, userInfo) => dispatch => (
+  database.ref(`users/${userId}`).update({ ...userInfo })
+);
+
+export const deleteInvite = (userId, inviteId) => dispatch => (
+  database.ref(`users/${userId}/invites/${inviteId}`).remove()
+);
+
+export const sendInvite = (recipientId, inviteInfo) => dispatch => (
+  database.ref(`users/${recipientId}/invites`).push(inviteInfo)
+);
+
+export const setCurrentUser = (userId, userInfo) => dispatch => (
+  database.ref('users/' + userId).set(userInfo)
+);
 
 // see if room exists 
 

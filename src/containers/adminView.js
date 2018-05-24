@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { database } from '../firebase.js';
+
+import { sendInvite } from '../actions/userActions';
 import { Table, Segment, Menu, Icon, Sidebar, Button, Image, Header, Grid } from 'semantic-ui-react';
 
 const inputStyle = {
@@ -32,14 +33,14 @@ class AdminView extends Component {
   handleSendInvite = recipientId => e => {
     const hideId = `hide-${recipientId}`;
     this.setState({ [hideId]: true })
-    const roomId = this.props.state.data.rooms.find(({ name }) => name === this.props.currentRoom).id
-    database
-      .ref(`users/${recipientId}/invites`)
-      .push({ 
-        roomId , 
-        senderName: this.props.state.data.users.find(({ id }) => id === this.props.state.user.currentUser).name,
-        roomName: this.props.currentRoom,
-      })
+    const roomId = this.props.state.data.rooms.find(({ name }) => name === this.props.currentRoom).id;
+    const inviteInfo = {
+      roomId, 
+      senderName: this.props.state.data.users.find(({ id }) => id === this.props.state.user.currentUser).name,
+      roomName: this.props.currentRoom,
+    };
+
+    this.props.sendInvite(recipientId, inviteInfo)
   }
 
   render = () => {
@@ -100,4 +101,8 @@ class AdminView extends Component {
 
 const mapStateToProps = state => ({ state })
 
-export default connect(mapStateToProps)(AdminView);
+const mapDispatchToProps = dispatch => ({
+  sendInvite: (recipientId, inviteInfo) => dispatch(sendInvite(recipientId, inviteInfo)),
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(AdminView);

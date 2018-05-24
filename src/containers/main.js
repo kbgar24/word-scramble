@@ -1,18 +1,17 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import firebase from 'firebase';
 import uuid from 'uuid';
 import { Table, Segment, Menu, Icon, Sidebar, Button, Image, Header } from 'semantic-ui-react';
 
-import LetterGenerator from '../components/letterGenerator.jsx';
+import LetterGenerator from '../components/letterGenerator';
 import GameRoom from './gameRoom';
 import Lobby from '../components/lobby';
 
 import { mapObjToArray } from '../helpers';
 import { fetchData } from '../actions/fetchActions';
-import { createNewRoom } from '../actions/roomActions';
-import { joinUserRoom } from '../actions/userActions';
+import { createNewRoom, removeRoom } from '../actions/roomActions';
+import { joinUserRoom, updateUserInfo, deleteInvite } from '../actions/userActions';
 
 class Main extends Component {
 
@@ -23,7 +22,7 @@ class Main extends Component {
   }
 
   static getDerivedStateFromProps = (nextProps, prevState) => {
-    const { pathname } = nextProps.location;
+    const { history, location: { pathname } } = nextProps;
     const roomId = pathname.slice(10);
     const currentUserId = nextProps.state.user.currentUser;
     const currentUser = currentUserId
@@ -35,7 +34,7 @@ class Main extends Component {
         return tv;
       }
       tv[currentRoom] 
-      ? tv[currentRoom]++ 
+      ? tv[currentRoom].count++ 
       : tv[currentRoom] = { count:  1};
       isAdmin && (tv[currentRoom].admin = name);
       return tv;
@@ -46,15 +45,29 @@ class Main extends Component {
 
     if (roomId) {
       newRoom = nextProps.state.data.rooms.find(({id}) => id === roomId);
+      if (roomId && !newRoom){
+        console.log('nextProps: ', nextProps);
+        console.log('nextProps.state.data.rooms: ', nextProps.state.data.rooms);
+        // alert('whoah!')
+        console.log('room', roomId, newRoom)
+        alert('room', roomId);
+        alert('newRoom', newRoom);
+        
+        // alert('newRoom: ', newRoom);
+        
+        history.push('/');
+      }
     }
-    
     /*  Handles invite urls */
-    if (newRoom) {
-      firebase.database().ref(`users/${currentUserId}`).update({
+    if (roomId.length > 5 && newRoom) {
+      // alert('change: ', roomId)
+      history.push('/');
+      const userInfo = {
         currentRoom: newRoom.name,
         isAdmin: false,
-      })
-    }
+      }
+      this.props.updateUserInfo(currentUserId, userInfo)
+    } 
 
     if (currentUser){
       invites = currentUser.invites
@@ -102,18 +115,17 @@ class Main extends Component {
         .filter(({ currentRoom }) => currentRoom === currentUserRoom)
         .map(({ id }) => id)
         .forEach(id => {
-          firebase.database().ref(`users/${id}`).update({
+          const userInfo = {
             currentRoom: 'Lobby',
             isAdmin: false,
-          })
+          }
+          this.props.updateUserInfo(id, userInfo )
         })
-      firebase.database().ref(`rooms/${currentUserRoom}`).remove();
+        this.props.removeRoom(currentUserRoom);
 
     /* Otherwise just send user to Lobby */
     } else {
-      firebase.database().ref(`users/${id}`).update({
-        currentRoom: 'Lobby',
-      })
+      this.props.updateUserInfo(id, { currentRoom: 'Lobby' })
     }
     /* Handle url invites */
     this.props.history.replace('/');
@@ -122,16 +134,13 @@ class Main extends Component {
 
   handleJoinRoom = name => () => {
     const id = this.props.state.user.currentUser;
-    firebase.database().ref(`users/${id}`).update({
-      currentRoom: name,
-    })
-    this.props.joinUserRoom(name);
+    this.props.updateUserInfo(id, { currentRoom: name })
   }
 
   handleInviteDecline = senderName => () => {
     const{ invites, id } = this.state.currentUser;
     const toDelete = Object.keys(invites).find(key => invites[key].senderName === senderName);
-    firebase.database().ref(`users/${id}/invites/${toDelete}`).remove();
+    this.props.deleteInvite(id, toDelete);
   }
 
   render = () => (
@@ -197,6 +206,9 @@ const mapDispatchToProps = dispatch => ({
   fetchData: () => dispatch(fetchData()),
   createNewRoom,
   joinUserRoom: roomName => dispatch(joinUserRoom(roomName)),
+  updateUserInfo: (userId, userInfo) => dispatch(updateUserInfo(userId, userInfo)),
+  removeRoom: roomName => dispatch(removeRoom(roomName)),
+  deleteInvite: (userId, inviteId) => dispatch(deleteInvite(userId, inviteId)),
 
 });
 
