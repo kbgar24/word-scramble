@@ -25,6 +25,8 @@ class GameRoom extends Component {
     totalScore: 0,
     showScoreboard: false,
     timerColor: 'white',
+    recolorTime: '',
+    resetColorTime: ''
   }
 
   componentDidMount() {
@@ -47,6 +49,7 @@ class GameRoom extends Component {
     const alreadyPlayedWords = alreadyPlayed
       ? Object.keys(alreadyPlayed).map(key => alreadyPlayed[key])
       : []
+
 
     return  { 
       ...prevState,
@@ -77,14 +80,14 @@ class GameRoom extends Component {
         updateUserInfo(id, { totalScore: 0, lastWordScore: 0 })
       }
     })
-      setTimeout(() => {
-        this.setState({ timerColor: 'red' })
-      }, 45000);
+    //   setTimeout(() => {
+    //     this.setState({ timerColor: 'red' })
+    //   }, 45000);
 
-      setTimeout(() => {
-        this.props.updateRoomInfo(roomName, { hasStarted: false, startTime: false, showScoreboard: true })
-        this.setState({ timerColor: 'white' })
-    }, 60100)
+    //   setTimeout(() => {
+    //     this.props.updateRoomInfo(roomName, { hasStarted: false, startTime: false, showScoreboard: true })
+    //     this.setState({ timerColor: 'white' })
+    // }, 60100)
     
     this.handleGameOver();
   }
@@ -185,12 +188,34 @@ class GameRoom extends Component {
       wordStatus,
       hasStarted,
       startTime,
-      timerColor } = this.state;
+      timerColor,
+      recolorTime,
+      roomName,
+     } = this.state;
     const { users } = this.props.state.data;
     const { currentRoom:myCurrentRoom, isAdmin } = this.props.currentUser;
     const currentRoomObj = this.props.state.data.rooms.find(({ name }) => name === myCurrentRoom)
     const { currentLetters } = currentRoomObj;
-    
+
+    if (startTime&& !recolorTime) {
+      const now = Date.now()
+      const recolorTime = startTime + 45000 - now
+      const resetColorTime = startTime + 60100 - now;
+      this.setState({recolorTime})
+      if (recolorTime > 0) {
+        setTimeout(() => {
+          this.setState({ timerColor: 'red', recolorTime: '' })
+        }, recolorTime);
+      }
+
+      if (resetColorTime > 0) {
+        setTimeout(() => {
+          this.props.updateRoomInfo(myCurrentRoom, { hasStarted: false, startTime: false, showScoreboard: true })
+          this.setState({ timerColor: 'white', resetColorTime: '' })
+        }, resetColorTime)
+      }
+    }
+      
     return (
       <div className='gameRoom'>
       
@@ -205,6 +230,8 @@ class GameRoom extends Component {
               />
             }
             <Scoreboard scoreBoard={scoreBoard} users={users} myCurrentRoom={myCurrentRoom} />
+            
+            <Hotkeys />
             
             <GameRulesModal />
 
