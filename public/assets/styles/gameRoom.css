@@ -95,6 +95,7 @@ div.copy-text {
 
 div.ui.grid{
   height: 100vh;
+  min-height: 1000px;
 }
 
 div.three.wide.column {
@@ -203,7 +204,7 @@ button + .admin-sep {
   width: 90%;
   margin: 30px auto;
 }
-.scoreboard-div > h2 {
+.scoreboard-div > h2, .hotkey > h2 {
   text-align: center;
   margin: 0px;
   color: #A2B4C2;
@@ -216,4 +217,15 @@ button + .admin-sep {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+}
+
+
+div.hotKey {
+  margin: 0px auto auto auto;
+  width: 90%;
+}
+
+.hotkey > h2 {
+  text-align: center;
+  margin: 30px auto 0px auto;
 }
