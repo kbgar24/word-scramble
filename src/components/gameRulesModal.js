@@ -1,11 +1,10 @@
 import React from 'react'
-import { Button, Header, Image, Modal } from 'semantic-ui-react'
+import { Button, Header, Modal } from 'semantic-ui-react'
 
 const GameRulesModal = () => (
   <Modal style={{ textAlign: 'center' }} trigger={<Button className='facebook modal-btn'>Game Rules</Button>}>
     <Modal.Header>Game Rules</Modal.Header>
     <Modal.Content>
-      {/* <Image wrapped size='medium' src='/assets/images/avatar/large/rachel.png' /> */}
       <Modal.Description>
         <p>When the admin starts gameplay, a random list of 9 letters will be generated for all users. </p>
         <p>You will then have 60 seconds to enter as many unique words as possible.</p>

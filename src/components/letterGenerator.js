@@ -1,5 +1,4 @@
 import React from 'react';
-import { Table, Segment, Menu, Icon, Sidebar, Button, Image, Header } from 'semantic-ui-react';
 
 import { 
   vowels,

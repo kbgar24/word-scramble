@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { Table, Segment, Menu, Icon, Sidebar, Button, Image, Header, Grid } from 'semantic-ui-react';
+import {  Button, Grid } from 'semantic-ui-react';
 
 import LetterGenerator from '../components/letterGenerator';
 import CountdownWrapper from '../components/countdownWrapper';

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import uuid from 'uuid';
-import { Table, Segment, Menu, Icon, Sidebar, Button, Image, Header } from 'semantic-ui-react';
+import { Menu } from 'semantic-ui-react';
 
 import LetterGenerator from '../components/letterGenerator';
 import GameRoom from './gameRoom';

@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import { Table, Segment, Menu, Icon, Sidebar, Button, Image, Header } from 'semantic-ui-react';
-import { onlyLetters } from '../helpers';
-
+import { Table, Button } from 'semantic-ui-react';
 
 export default class Lobby extends Component {
   render = () => (

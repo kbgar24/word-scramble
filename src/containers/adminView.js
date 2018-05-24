@@ -3,12 +3,7 @@ import { connect } from 'react-redux';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import { sendInvite } from '../actions/userActions';
-import { Table, Segment, Menu, Icon, Sidebar, Button, Image, Header, Grid } from 'semantic-ui-react';
-
-const inputStyle = {
-  width: '450px',
-  textAlign: 'center',
-}
+import { Table,  Button } from 'semantic-ui-react';
 
 class AdminView extends Component {
 

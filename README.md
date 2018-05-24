@@ -1,5 +1,4 @@
 # WordScramble
-# HomeFlix
 The world's premiere word scramble game!
 
 ## Overview
@@ -15,5 +14,5 @@ After cloning the repository locally, run the following commands in your termina
 
 ```bash
 $ yarn install
-$ yarn run dev-start           # Spins up server on localhost:8080
+$ yarn run dev-start           # Spins up dev-server on localhost:8080
 ```
