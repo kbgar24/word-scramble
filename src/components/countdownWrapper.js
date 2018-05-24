@@ -17,7 +17,7 @@ export default class CountdownWrapper extends Component {
             precision={3}
             renderer={props => <div>{(props.total / 1000).toFixed(2)}</div>}
           />
-        : <div>20.00</div>
+        : <div>60.00</div>
       }
     </div>
   )

@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 export const vowels = 'aeiouy'.split('');
 
 export const consonants = 'bcdfghjklmnpqrstvwxz'.split('');
@@ -87,6 +89,20 @@ export const scoreMap = {
   1: 2,
 }
 
-export const isRealWord = word => Math.floor(Math.random() * 2);
+// export const isRealWord = word => Math.floor(Math.random() * 2);
+
+export const isRealWord = word => (
+  axios.get('https://od-api.oxforddictionaries.com:443/api/v1/inflections/en/'+word, {
+    headers: {
+      "Accept": "application/json",
+      "app_id": "57302cba",
+      "app_key": "9637f0d9fa0a2a042c6c2ad3db091139"
+    }
+  })
+  .then((res) => {
+    console.log('res from api: ', res);
+  })
+  .catch((e) => { console.error(e) });
+)
 
 export const mapObjToArray = obj => Object.keys(obj).map(key => obj[key])
